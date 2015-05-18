@@ -1,19 +1,29 @@
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
-package cz.colormemory.kdysem.game.logic;
+package cz.colormemory.kdysem.game.entities;
+
+import cz.colormemory.kdysem.game.commands.CommandList;
+import cz.colormemory.kdysem.game.logic.Inventory;
+
+
 
 
 
 /*******************************************************************************
- * Instances of class {@code CommandInteraction} represent ...
+ * Instance třídy {@code Button} představují tlačítko invetáře, které nějak aktivuje vybrané věci.
+ * Nutno domyslet a dopsat.
  *
  * @author  André HELLER
  * @version 1.00 — 02/2014
  */
-public class CommandInteraction extends ACommand
+public class Button extends AGameObject
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
+
+    /** Odkaz na inventář */
+    private static final Inventory INVENTORY = Inventory.getInstance();
+
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
@@ -25,10 +35,12 @@ public class CommandInteraction extends ACommand
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
 
     /***************************************************************************
-     *
+     * Deafultní konstruktor. NUTNÉ PŘIDAT DALŠÍ TYPY A CELKOVĚ JE LÉPE DOMYSLET
      */
-    public CommandInteraction()
+
+    public Button(String[] description)
     {
+        super("", description, new Placement());
     }
 
 
@@ -38,15 +50,28 @@ public class CommandInteraction extends ACommand
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
 
     /***************************************************************************
+     * Zděděná metoda. Spouštěč herních příkazů.
      *
-     * @param touchObject
-     * @return
+     * Musí se dopsat, bude to něco na procipu, když bude v inventáři víc vybraných položek, bude je kombinovat jinak je bde interagovat a dávat do výberu, který zatím také asi nen vytvořen.
+     *
+     * @return typ spouštěného příkazu
      */
     @Override
-    public boolean execute(AGameObject touchObject)
+    public CommandList touch()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return CommandList.COMBINE;
+        //return CommandList.INTERACTION;
     }
+    
+    
+    /***************************************************************************
+     * 
+     * @return 
+     */
+    public String toJSONString() {
+        return "{'test':'test'}";
+    }
+
 
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
 //== PRIVATE AND AUXILIARY INSTANCE METHODS ====================================
@@ -58,7 +83,7 @@ public class CommandInteraction extends ACommand
 //     */
 //    public static void test()
 //    {
-//        CommandInteraction inst = new CommandInteraction();
+//        Button inst = new Button();
 //    }
 //    /** @param args Command line arguments - not used. */
 //    public static void main(String[] args)  {  test();  }

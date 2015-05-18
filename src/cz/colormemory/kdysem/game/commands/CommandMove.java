@@ -1,39 +1,24 @@
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
-package cz.colormemory.kdysem.game.logic;
+package cz.colormemory.kdysem.game.commands;
 
-import java.awt.Point;
-
-
+import cz.colormemory.kdysem.game.entities.AGameObject;
 
 
 
 /*******************************************************************************
- * Třída {@code CoordinateTranslator} je jedináček, představující překladatele
- * souřadnice. Jelikož může samotná místnost být širší než zobrazovaný display,
- * musí přepošítat displayové souřadnice na souřadnice v místnosti.
- * K tomu používá třídu {@link StateManager}, která si pamatuje právě tento posun.
+ * Instances of class {@code CommandMove} represent ...
  *
  * @author  André HELLER
  * @version 1.00 — 02/2014
  */
-public class CoordinateTranslator
+public class CommandMove extends ACommand
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
-
-    /** Odkaz na jedináčka */
-    private static final CoordinateTranslator SINGLETON =
-                                                    new CoordinateTranslator();
-
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
-
-    /** Odkaz na správce herních stavů */
-    private final StateManager STATE_MANAGER = Game.getInstance()
-                                                            .getStateManager();
-
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
 //== CLASS GETTERS AND SETTERS =================================================
 //== OTHER NON-PRIVATE CLASS METHODS ===========================================
@@ -41,22 +26,12 @@ public class CoordinateTranslator
 //##############################################################################
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
 
-
     /***************************************************************************
-     * Tovární metoda vracející odkaz na jedináčka.
      *
-     * @return
      */
-    public static CoordinateTranslator getInstance(){
-        return SINGLETON;
+    public CommandMove()
+    {
     }
-
-
-    /***************************************************************************
-     * Privátní konstruktor zabřanující vytvoření instance
-     */
-    private CoordinateTranslator()
-    {/* ... */}
 
 
 
@@ -65,22 +40,14 @@ public class CoordinateTranslator
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
 
     /***************************************************************************
-     * Přepočítá zadané displayové souřadnice na realné souřadnice v místnosti.
-     * Protože hráč může chodit po místnosti, která je delší než zobrazovaný
-     * display. V tomto případě se mužou souřadnice místnosti a souřadnice
-     * displaye lišit.
      *
-     * @param point displayové souřadnice
-     * @return raálné souřadnice v místnosti
+     * @param touchObject
+     * @return
      */
-    public Point calculate(Point point){
-
-        // Získá displayový posun
-        int roomShift = STATE_MANAGER.getRoomShift();
-
-        point.x = point.x + roomShift;
-
-        return point;
+    @Override
+    public boolean execute(AGameObject touchObject)
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
@@ -93,7 +60,7 @@ public class CoordinateTranslator
 //     */
 //    public static void test()
 //    {
-//        CoordinateTranslator inst = new CoordinateTranslator();
+//        CommandMove inst = new CommandMove();
 //    }
 //    /** @param args Command line arguments - not used. */
 //    public static void main(String[] args)  {  test();  }

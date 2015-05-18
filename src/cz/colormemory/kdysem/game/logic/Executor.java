@@ -3,6 +3,8 @@
  */
 package cz.colormemory.kdysem.game.logic;
 
+import cz.colormemory.kdysem.game.commands.CommandList;
+import cz.colormemory.kdysem.game.entities.AGameObject;
 import java.awt.Point;
 
 
@@ -18,24 +20,18 @@ import java.awt.Point;
  */
 public class Executor
 {
-//== CONSTANT CLASS ATTRIBUTES =================================================
-
-    /** Odkaz an jedináčka */
-    private static final Executor SINGLETON = new Executor();
-
+//== CONSTANT CLASS ATTRIBUTES =================================================    
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
 
-    /** Odkaz na hru */
+    /** Odkaz na Hlavní třídu hry */
     private final Game GAME = Game.getInstance();
-
-    /** Odkaz na překladač souřadnic */
-    private final CoordinateTranslator COORD_TRANSLATOR =
-                                            CoordinateTranslator.getInstance();
 
     /** Odkaz na správce mísností */
     private final RoomManager ROOM_MANAGER = RoomManager.getInstance();
+    
+    private final StateManager STATE_MANAGER = GAME.getStateManager();
 
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
 //== CLASS GETTERS AND SETTERS =================================================
@@ -43,23 +39,14 @@ public class Executor
 
 //##############################################################################
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
-
-    /***************************************************************************
-     * Tovární metoda vrací odkaz na jedináčka.
-     *
-     * @return odkaz na jedináčka
-     */
-    public static Executor getInstance()
-    {
-        return SINGLETON;
-    }
-
-
+    
     /***************************************************************************
      * Privátní konstruktor zabřanující vytvoření instance.
      */
-    private Executor()
-    {/* ... */}
+    public Executor()
+    {
+     
+    }
 
 
 //== ABSTRACT METHODS ==========================================================
@@ -77,12 +64,13 @@ public class Executor
      * že nastale nějaká změna.
      *
      * @param coordinates souřadnice dotyku
+     * @return 
      */
-    public void processTouch(Point coordinates) throws NullPointerException
+    public boolean processTouch(Point coordinates)
     {
 
         /* Přepočítá souřadnice */
-        Point roomCoord = COORD_TRANSLATOR.calculate(coordinates);
+        Point roomCoord = calculateRoomShift(coordinates);
 
         boolean isExecute = false;
 
@@ -98,17 +86,40 @@ public class Executor
         }
         catch (NullPointerException e){
             //Na zadaných souřadnicích neí žádný objekt a nedá se nic dělat - nutné nějak dopojistitit !!!!!!!!!!!!!!!
+            System.out.println("Nic nanalezeno!");
         }
-
-
 
         if(isExecute){
             GAME.notifyListeners();
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
 //== PRIVATE AND AUXILIARY INSTANCE METHODS ====================================
+    
+    /***************************************************************************
+     * Přepočítá zadané displayové souřadnice na realné souřadnice v místnosti.
+     * Protože hráč může chodit po místnosti, která je delší než zobrazovaný
+     * display. V tomto případě se mužou souřadnice místnosti a souřadnice
+     * displaye lišit.
+     *
+     * @param point displayové souřadnice
+     * @return raálné souřadnice v místnosti
+     */
+    private Point calculateRoomShift(Point point){
+
+        // Získá displayový posun
+        int roomShift = STATE_MANAGER.getRoomShift();
+
+        point.x = point.x + roomShift;
+
+        return point;
+    }
+    
 //== EMBEDDED TYPES AND INNER CLASSES ==========================================
 //== TESTING CLASSES AND METHODS ===============================================
 //

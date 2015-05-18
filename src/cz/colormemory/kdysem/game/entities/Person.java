@@ -1,22 +1,30 @@
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
-package cz.colormemory.kdysem.game.logic;
+package cz.colormemory.kdysem.game.entities;
+
+import cz.colormemory.json.JSONConstructor;
+import cz.colormemory.json.JSONException;
+import cz.colormemory.kdysem.game.commands.CommandList;
 
 
 
 /*******************************************************************************
- * Instances of class {@code CommandDescribe} represent ...
+ * Instance třídy {@code Person} představují osoby v místnostech
  *
  * @author  André HELLER
  * @version 1.00 — 02/2014
  */
-public class CommandDescribe extends ACommand
+public class Person extends AGameObject
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
+
+    /** Dialog osoby */
+    private final Dialog DIALOG;
+
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
 //== CLASS GETTERS AND SETTERS =================================================
 //== OTHER NON-PRIVATE CLASS METHODS ===========================================
@@ -25,10 +33,16 @@ public class CommandDescribe extends ACommand
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
 
     /***************************************************************************
+     * Deafultní konstruktor. NUTNÉ PŘIDAT DALŠÍ TYPY A CELKOVĚ JE LÉPE DOMYSLET
      *
+     * @param name
+     * @param dialog
+     * @param description
      */
-    public CommandDescribe()
+    public Person(String name, String[] description, Dialog dialog)
     {
+        super(name, description, new Placement());
+        this.DIALOG = dialog;
     }
 
 
@@ -38,14 +52,47 @@ public class CommandDescribe extends ACommand
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
 
     /***************************************************************************
+     * Zděděná metoda. Spouštěč herních příkazů.
      *
-     * @param touchObject
-     * @return
+     * @return typ spouštěného příkazu
      */
     @Override
-    public boolean execute(AGameObject touchObject)
+    public CommandList touch()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return CommandList.DIALOG;
+    }
+    
+    
+    /***************************************************************************
+     * Převede instanci transporteru na JSON string
+     * 
+     * @return Neformátovaný JSON string reprezentující instanci
+     * {
+            "position": "java.awt.Point[x=0,y=0]",
+            "name": "Koupelna",
+            "priority": 1,
+            "description": "Vlez do vany",
+            "target": "03"
+        }
+     * 
+     * @throws cz.colormemory.json.JSONException pokud se v JSONU vyskytne 
+     * syntaktická chyba
+     */
+    @Override
+    public String toJSONString() throws JSONException {
+        JSONConstructor json = new JSONConstructor();
+        
+        json.object()
+                .key("name").value(super.getName())
+                .key("description").array();
+
+        for(String description : super.getDescription()){
+                json.value(description);
+        }
+            json.endArray()
+        .endObject();
+        
+        return json.toString();
     }
 
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
@@ -58,7 +105,7 @@ public class CommandDescribe extends ACommand
 //     */
 //    public static void test()
 //    {
-//        CommandDescribe inst = new CommandDescribe();
+//        Person inst = new Person();
 //    }
 //    /** @param args Command line arguments - not used. */
 //    public static void main(String[] args)  {  test();  }

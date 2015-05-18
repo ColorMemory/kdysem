@@ -1,32 +1,25 @@
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
-package cz.colormemory.kdysem.game.logic;
+package cz.colormemory.kdysem.game.commands;
+
+import cz.colormemory.kdysem.game.entities.AGameObject;
 
 
 
 /*******************************************************************************
- * Intance třídy {@code Item} představují herní objekty, které může hráč
- * různě používat, zvedat, kombinvoat, apod.
+ * Instances of class {@code CommandUse} represent ...
  *
  * @author  André HELLER
  * @version 1.00 — 02/2014
  */
-public class Item extends AGameObject
+public class CommandUse extends ACommand
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
-
-    /** Odkaz na Inventář */
-    private final Inventory INVENTORY = Inventory.getInstance();
-
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
-
-    /** Zvednutelnost předmětu */
-    private boolean pickable;
-
 //== CLASS GETTERS AND SETTERS =================================================
 //== OTHER NON-PRIVATE CLASS METHODS ===========================================
 
@@ -34,11 +27,10 @@ public class Item extends AGameObject
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
 
     /***************************************************************************
-     * Deafultní konstruktor. NUTNÉ PŘIDAT DALŠÍ TYPY A CELKOVĚ JE LÉPE DOMYSLET
+     *
      */
-    public Item()
+    public CommandUse()
     {
-        super("", "", new Placement());
     }
 
 
@@ -48,46 +40,18 @@ public class Item extends AGameObject
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
 
     /***************************************************************************
-     * Zděděná metoda. Spouštěč herních příkazů.
      *
-     * @return typ příkazu, který se má zavolat
+     * @param touchObject
+     * @return
      */
     @Override
-    public CommandList touch()
+    public boolean execute(AGameObject touchObject)
     {
-
-        // NEBERE V POTAZ PŘÍKAZ DESCRIBE, MUSÍ SE DOMYSLET
-        if(getPickability()){
-            return CommandList.PICK_UP;
-        }
-        else {
-            return CommandList.USE;
-        }
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
 //== PRIVATE AND AUXILIARY INSTANCE METHODS ====================================
-
-    /***************************************************************************
-     * Vrátí zvednutelnost předmětu
-     *
-     * @return zvednutelnost
-     */
-    private boolean getPickability(){
-        return pickable;
-    }
-
-
-    /***************************************************************************
-     * Nastaví zvednutelnost předmětu
-     *
-     * @param pickable nová zvednutelnost
-     */
-    private void setPickability(boolean pickable){
-        this.pickable = pickable;
-    }
-
-
 //== EMBEDDED TYPES AND INNER CLASSES ==========================================
 //== TESTING CLASSES AND METHODS ===============================================
 //
@@ -96,7 +60,7 @@ public class Item extends AGameObject
 //     */
 //    public static void test()
 //    {
-//        Item inst = new Item();
+//        CommandUse inst = new CommandUse();
 //    }
 //    /** @param args Command line arguments - not used. */
 //    public static void main(String[] args)  {  test();  }

@@ -3,7 +3,7 @@
  */
 package cz.colormemory.kdysem.game.support;
 
-import cz.colormemory.kdysem.game.logic.CommandList;
+import cz.colormemory.kdysem.game.commands.CommandList;
 
 
 

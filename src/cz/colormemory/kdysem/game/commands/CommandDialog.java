@@ -1,17 +1,19 @@
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
-package cz.colormemory.kdysem.game.logic;
+package cz.colormemory.kdysem.game.commands;
+
+import cz.colormemory.kdysem.game.entities.AGameObject;
 
 
 
 /*******************************************************************************
- * Instances of class {@code CommandPickUp} represent ...
+ * Instances of class {@code CommandDialog} represent ...
  *
  * @author  André HELLER
  * @version 1.00 — 02/2014
  */
-public class CommandPickUp extends ACommand
+public class CommandDialog extends ACommand
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
 //== VARIABLE CLASS ATTRIBUTES =================================================
@@ -27,7 +29,7 @@ public class CommandPickUp extends ACommand
     /***************************************************************************
      *
      */
-    public CommandPickUp()
+    public CommandDialog()
     {
     }
 
@@ -47,7 +49,6 @@ public class CommandPickUp extends ACommand
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
 //== PRIVATE AND AUXILIARY INSTANCE METHODS ====================================
 //== EMBEDDED TYPES AND INNER CLASSES ==========================================
@@ -58,7 +59,7 @@ public class CommandPickUp extends ACommand
 //     */
 //    public static void test()
 //    {
-//        CommandPickUp inst = new CommandPickUp();
+//        CommandDialog inst = new CommandDialog();
 //    }
 //    /** @param args Command line arguments - not used. */
 //    public static void main(String[] args)  {  test();  }

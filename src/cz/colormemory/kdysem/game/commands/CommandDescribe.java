@@ -1,23 +1,19 @@
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
-package cz.colormemory.kdysem.game.logic;
+package cz.colormemory.kdysem.game.commands;
 
-import java.awt.Point;
-
-
+import cz.colormemory.kdysem.game.entities.AGameObject;
 
 
 
 /*******************************************************************************
- * Třída {@code CommandTransport} představuje příkaz, který přesouvá hráče
- * z místnosti do místnosti. Jinými slovy mění aktuální místnost a zajištuje
- * vše potřebné okolo toho.
+ * Instances of class {@code CommandDescribe} represent ...
  *
  * @author  André HELLER
  * @version 1.00 — 02/2014
  */
-public class CommandTransport extends ACommand
+public class CommandDescribe extends ACommand
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
 //== VARIABLE CLASS ATTRIBUTES =================================================
@@ -31,9 +27,9 @@ public class CommandTransport extends ACommand
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
 
     /***************************************************************************
-     * Implicitní konstruktor
+     *
      */
-    public CommandTransport()
+    public CommandDescribe()
     {
     }
 
@@ -44,29 +40,15 @@ public class CommandTransport extends ACommand
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
 
     /***************************************************************************
-     * Vyvolá spuštení příkazu.
      *
-     * @param touchObject objekt, který souvisí se spuštením (Spuštěný Transporter)
-     * @return true nebo {@link IllegalArgumentException}
+     * @param touchObject
+     * @return
      */
     @Override
     public boolean execute(AGameObject touchObject)
-    {
-        if(touchObject instanceof  Transporter){
-            Transporter transporter = (Transporter)touchObject;
-
-            Room targetRoom = transporter.getTargetRoom();
-            Point targetPosition = transporter.getTargetPosition();
-
-            ROOM_MANAGER.setCurrentRoom(targetRoom);
-            ROOM_MANAGER.getCurrentRoom().setActiveTransportPosition(targetPosition);
-
-            return true;
-
-        }
-        else {
-            throw new IllegalArgumentException("Tento příkaz podporuje pouze typ Transporter");
-        }
+    {       
+        System.out.println(">>> DESCRIBE: " + touchObject.getDescription()[touchObject.getDescriptionIndex()]);
+        return true;
     }
 
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
@@ -79,7 +61,7 @@ public class CommandTransport extends ACommand
 //     */
 //    public static void test()
 //    {
-//        CommandTransport inst = new CommandTransport();
+//        CommandDescribe inst = new CommandDescribe();
 //    }
 //    /** @param args Command line arguments - not used. */
 //    public static void main(String[] args)  {  test();  }

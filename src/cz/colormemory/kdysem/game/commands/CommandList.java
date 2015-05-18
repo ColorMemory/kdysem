@@ -1,7 +1,9 @@
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
-package cz.colormemory.kdysem.game.logic;
+package cz.colormemory.kdysem.game.commands;
+
+import cz.colormemory.kdysem.game.entities.AGameObject;
 
 
 

@@ -1,26 +1,24 @@
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
-package cz.colormemory.kdysem.game.logic;
+package cz.colormemory.kdysem.game.commands;
+
+import cz.colormemory.kdysem.game.entities.AGameObject;
 
 
 
 /*******************************************************************************
- * Instance třídy {@code Person} představují osoby v místnostech
+ * Instances of class {@code CommandInteraction} represent ...
  *
  * @author  André HELLER
  * @version 1.00 — 02/2014
  */
-public class Person extends AGameObject
+public class CommandInteraction extends ACommand
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
-
-    /** Dialog osoby */
-    private final Dialog DIALOG;
-
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
 //== CLASS GETTERS AND SETTERS =================================================
 //== OTHER NON-PRIVATE CLASS METHODS ===========================================
@@ -29,14 +27,10 @@ public class Person extends AGameObject
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
 
     /***************************************************************************
-     * Deafultní konstruktor. NUTNÉ PŘIDAT DALŠÍ TYPY A CELKOVĚ JE LÉPE DOMYSLET
      *
-     * @param dialog
      */
-    public Person(Dialog dialog)
+    public CommandInteraction()
     {
-        super("", "", new Placement());
-        this.DIALOG = dialog;
     }
 
 
@@ -46,14 +40,14 @@ public class Person extends AGameObject
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
 
     /***************************************************************************
-     * Zděděná metoda. Spouštěč herních příkazů.
      *
-     * @return typ spouštěného příkazu
+     * @param touchObject
+     * @return
      */
     @Override
-    public CommandList touch()
+    public boolean execute(AGameObject touchObject)
     {
-        return CommandList.DIALOG;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
@@ -66,7 +60,7 @@ public class Person extends AGameObject
 //     */
 //    public static void test()
 //    {
-//        Person inst = new Person();
+//        CommandInteraction inst = new CommandInteraction();
 //    }
 //    /** @param args Command line arguments - not used. */
 //    public static void main(String[] args)  {  test();  }

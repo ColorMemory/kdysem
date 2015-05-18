@@ -3,6 +3,7 @@
  */
 package cz.colormemory.kdysem.game.logic;
 
+import cz.colormemory.kdysem.game.entities.Item;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -33,6 +34,9 @@ public class Inventory
 
     /** kolekce itemů */
     private final Collection<Item> SELECTED_LIST = new ArrayList<>();
+    
+    /** Maximal capacity */
+    private final int MAX_CAPACITY = 10;
 
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
 //== CLASS GETTERS AND SETTERS =================================================
@@ -131,6 +135,15 @@ public class Inventory
     public boolean unselectItem(Item item)
     {
         return SELECTED_LIST.remove(item);
+    }
+    
+    /***************************************************************************
+     * Vrátí hodnotu maximální kapacity inventáře
+     * 
+     * @return maximální kapacita
+     */
+    public int getMaxCapacity() {
+        return MAX_CAPACITY;
     }
 
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================

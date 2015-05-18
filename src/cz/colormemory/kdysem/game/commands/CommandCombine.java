@@ -1,22 +1,19 @@
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
-package cz.colormemory.kdysem.game.logic;
+package cz.colormemory.kdysem.game.commands;
 
-import cz.colormemory.kdysem.game.support.ITouchable;
-import java.awt.Point;
-
-
+import cz.colormemory.kdysem.game.entities.AGameObject;
 
 
 
 /*******************************************************************************
- * Instance třídy {@code Floor} představují podlahu v místnosti.
+ * Instances of class {@code CommandCombine} represent ...
  *
  * @author  André HELLER
  * @version 1.00 — 02/2014
  */
-public class Floor implements ITouchable
+public class CommandCombine extends ACommand
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
 //== VARIABLE CLASS ATTRIBUTES =================================================
@@ -30,69 +27,27 @@ public class Floor implements ITouchable
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
 
     /***************************************************************************
-     * Nutné domyslet!!!!!!!!!!! Pravdě pdoobne top bude arraylist nebo hashset zjistit rozdíl a vybrat lepší usnadnilo by mnám práci, kdybchom podlehu mohli považovat za obdílník nejde to? to by pak dokonce skoro mohla být AGameOBject
      *
-     * @param polygon
      */
-    public Floor(int[] polygon)
+    public CommandCombine()
     {
-
     }
 
 
 
 //== ABSTRACT METHODS ==========================================================
 //== INSTANCE GETTERS AND SETTERS ==============================================
-
-    /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //Tyto metody tu jsou celekm na nic, přesto je v zásadě má, musíme se o tom pobavit....
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-    /***************************************************************************
-     * Vrátí prioritu vykleslení instance
-     *
-     * @return Celé číslo. Čím větší tím větší priorita == vyšší vrstva.
-     */
-    @Override
-    public int getPriority()
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-
-    /***************************************************************************
-     * Vrátí pozici instance;
-     *
-     * @return pozice instance
-     */
-    @Override
-    public Point getPosition()
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-
-    /***************************************************************************
-     * Vrátí velikost
-     *
-     * @return
-     */
-    @Override
-    public Point getScale()
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
 
     /***************************************************************************
-     * Zděděná metoda. Spouštěč herních příkazů.
+     *
+     * @param touchObject
+     * @return
      */
     @Override
-    public CommandList touch()
+    public boolean execute(AGameObject touchObject)
     {
-        throw new UnsupportedOperationException("Not yet.");
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
@@ -105,7 +60,7 @@ public class Floor implements ITouchable
 //     */
 //    public static void test()
 //    {
-//        Floor inst = new Floor();
+//        CommandCombine inst = new CommandCombine();
 //    }
 //    /** @param args Command line arguments - not used. */
 //    public static void main(String[] args)  {  test();  }

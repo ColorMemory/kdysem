@@ -1,8 +1,10 @@
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
-package cz.colormemory.kdysem.game.logic;
+package cz.colormemory.kdysem.game.entities;
 
+import cz.colormemory.json.JSONException;
+import cz.colormemory.kdysem.game.commands.CommandList;
 import cz.colormemory.kdysem.game.support.ITouchable;
 import java.awt.Point;
 import java.util.Collection;
@@ -33,7 +35,7 @@ public abstract class AGameObject implements ITouchable
     private final String NAME;
 
     /** Popis předmětu */
-    private final String DESCRIPTION;
+    private final String[] DESCRIPTION;
 
     /** Umístění předmětu */
     private final Placement PLACEMENT;
@@ -41,7 +43,10 @@ public abstract class AGameObject implements ITouchable
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
 
     /** Použitelnost objektu - aktivní/neaktivní */
-    private boolean useable;
+    private boolean active = true;
+    
+    /** Index ukazující, který popis objektu se má aktuálně používat */
+    private int descriptionIndex = 0;
 
 
 //== CLASS GETTERS AND SETTERS =================================================
@@ -60,7 +65,7 @@ public abstract class AGameObject implements ITouchable
      * @param description popis objektu
      * @param placement informace o umístění, velikosti a vykreslení
      */
-    protected AGameObject(String name, String description, Placement placement)
+    protected AGameObject(String name, String[] description, Placement placement)
     {
         this.ID = IDManager.generate();
         this.NAME = name;
@@ -76,6 +81,15 @@ public abstract class AGameObject implements ITouchable
      */
     @Override
     public abstract CommandList touch();
+    
+    
+    /***************************************************************************
+     * Metoda vrátí podle typu herního objektu typ příkazu pomocí
+     * výčtového typu {@link CommandList}.
+     * 
+     * @return 
+     */
+    public abstract String toJSONString() throws JSONException;
 
 //== INSTANCE GETTERS AND SETTERS ==============================================
 
@@ -97,20 +111,20 @@ public abstract class AGameObject implements ITouchable
      *
      * @return použitelnost objektu.
      */
-    public boolean getUsability()
+    public boolean isActive()
     {
-        return useable;
+        return active;
     }
 
 
     /***************************************************************************
      * Nastaví použitelnost objektu.
      *
-     * @param useable Zaktivní object v případě true, zneaktivní v případě false
+     * @param active Zaktivní object v případě true, zneaktivní v případě false
      */
-    public void setUsability(boolean useable)
+    public void setActivity(boolean active)
     {
-        this.useable = useable;
+        this.active = active;
     }
 
 
@@ -177,14 +191,31 @@ public abstract class AGameObject implements ITouchable
      *
      * @return popis objektu
      */
-    public String getDescription()
+    public String[] getDescription()
     {
         return DESCRIPTION;
     }
 
+    
+    /***************************************************************************
+     * Index ukazující, který popis objektu se má aktuálně používat
+     * 
+     * @return the descriptionIndex
+     */
+    public int getDescriptionIndex() {
+        return descriptionIndex;
+    }
 
 
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
+    
+    /***************************************************************************
+     * Index ukazující, který popis objektu se má aktuálně používat
+     */
+    public void incrementDescriptionIndex() {
+        this.descriptionIndex++;
+    }
+    
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
 //== PRIVATE AND AUXILIARY INSTANCE METHODS ====================================
 //== EMBEDDED TYPES AND INNER CLASSES ==========================================

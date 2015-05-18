@@ -3,6 +3,7 @@
  */
 package cz.colormemory.kdysem.framework;
 
+import cz.colormemory.kdysem.game.exceptions.GameControlException;
 import java.awt.Point;
 
 
@@ -18,23 +19,35 @@ import java.awt.Point;
  * @author  André HELLER
  * @version 1.00 — 02/2014
  */
-public interface IGame
+public interface IGame extends IBroadcaster
 {
 //== CONSTATS ==================================================================
 //== DECLARED GETTERS AND SETTERS ==============================================
 
     /***************************************************************************
-     * Inicializuje celou hru. Vytvoří objekty, ověří grafiku,.... DOPSAT!!!!!!
+     * Inicializuje celou hru. Vytvoří objekty místností, herních objektů, 
+     * pomocních tříd, ...
+     * 
+     * @return true pokud se vše inicializovalo tak jak má. V opačném 
+     * případě false.
      */
-    public void initialize();
+    public boolean initialize();
+    
+    
+    /***************************************************************************
+     * Uloží aktuální stav hry.
+     * 
+     */
+    public void save();
 
 
     /***************************************************************************
      * Metoda zpracovává předané souřadnice doteku na displayi.
      *
      * @param point předané souřadnice
+     * @return 
      */
-    public void processTouch(Point point);
+    public boolean processTouch(Point point) throws GameControlException;
 
 
 //== INHERITED GETTERS AND SETTERS =============================================

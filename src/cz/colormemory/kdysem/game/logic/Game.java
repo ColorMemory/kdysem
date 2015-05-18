@@ -3,6 +3,8 @@
  */
 package cz.colormemory.kdysem.game.logic;
 
+import cz.colormemory.kdysem.game.exceptions.GameControlException;
+import cz.colormemory.kdysem.game.exceptions.GameInitializeException;
 import cz.colormemory.kdysem.framework.IGame;
 import cz.colormemory.kdysem.framework.IListener;
 import java.awt.Point;
@@ -21,8 +23,6 @@ import java.awt.Point;
  */
 public class Game implements IGame
 {
-
-
 //== CONSTANT CLASS ATTRIBUTES =================================================
 
     /** Odkaz na jedináčka */
@@ -32,19 +32,24 @@ public class Game implements IGame
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
 
-    /** Odkaz na executora - vykonávací třída, zajištuje herní běh */
-    private final Executor EXECUTOR = Executor.getInstance();
-
-    /** Odkaz na Správce herních stavů */
-    private final StateManager STATE_MANAGER = StateManager.getInstnace();
-
-    /** Odkaz na herní inicializátor */
-    private final Initializator INITIALIZATOR = Initializator.getInstance();
-
     /** Vysílač zpráv o změnách pro posluchače */
     private final Broadcaster BROADCASTER = new Broadcaster();
 
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
+    
+    /** Odkaz na Správce herních stavů */
+    private StateManager stateManager;
+    
+    /** Odkaz na executora - vykonávací třída, zajištuje herní běh */
+    private Executor executor;
+
+    /** Odkaz na herní inicializátor */
+    private SerializeManager serializeManager;
+    
+    /** Pomocná proměná, které kontroluje, zda-li již hra byla inicializována */
+    private boolean initialized = false;
+    
+    
 //== CLASS GETTERS AND SETTERS =================================================
 //== OTHER NON-PRIVATE CLASS METHODS ===========================================
 
@@ -66,23 +71,54 @@ public class Game implements IGame
      * Privátní konstruktor zabraňující vytvoření instance
      */
     private Game()
-    {/* ... */}
-
+    {
+        
+        
+    }
 
 
 //== ABSTRACT METHODS ==========================================================
 //== INSTANCE GETTERS AND SETTERS ==============================================
 
     /***************************************************************************
-     * Vrátí odkaz na správce stavů.
-     *
-     * @return odkaz na správce stavů
+     * Vrátí odkaz na Správce herních stavů
+     * 
+     * @return the StateManager, pokud hra ještě není inicializovaná pomocí 
+     * metody initialize(), tak vrátí null
      */
-    public StateManager getStateManager()
-    {
-        return STATE_MANAGER;
+    public StateManager getStateManager() {
+        if(!initialized){
+            initialize();
+        }
+        return stateManager;
     }
-
+    
+    /***************************************************************************
+     * Vrátí odkaz na Správce herních stavů
+     * 
+     * @return Executor, pokud hra ještě není inicializovaná pomocí 
+     * metody initialize(), tak vrátí null
+     */
+    public Executor getExecutor() {
+        if(!initialized){
+            initialize();
+        }
+        return executor;
+    }
+    
+    /***************************************************************************
+     * Vrátí odkaz na Správce herních stavů
+     * 
+     * @return Save Load Manager, pokud hra ještě není inicializovaná pomocí 
+     * metody initialize(), tak vrátí null
+     */
+    public SerializeManager getSerializeManager(){
+        if(!initialized){
+            initialize();
+        }
+        return serializeManager;
+    }
+    
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
 
     /***************************************************************************
@@ -90,9 +126,61 @@ public class Game implements IGame
      * pro začátek hry
      */
     @Override
-    public void initialize()
+    public boolean initialize()
     {
-        INITIALIZATOR.initialize();
+        /* Pomocná kontrolní proměnná. Zbaraňuje volání ostatních příkazu, dokud
+         * se nespustí tato metoda. Současně se ale nemůže změnit až na konci 
+         * metody, protože by nefunugovali inicializace podobjektů. Nicméně tím,
+         * že je metoda už spuštěné, můžeme přepokládám, že doběhne v pořádku.
+         */
+        initialized = true;
+        
+        /* Inicializuje ostatní třídy, které potřebují již existující instaci game, nutné v tomto pořadí! */
+        stateManager = new StateManager();
+        executor = new Executor();
+        serializeManager = new SerializeManager();
+        
+        
+        try {
+            // inicializuje configuraci dle konfiguračního souboru
+            serializeManager.initialize();
+        } catch (GameInitializeException ex) {
+            System.out.println("==============================================="
+                    + "\nException: " + ex.getMessage());
+            ex.printStackTrace();
+            initialized = false;
+        }
+        
+        return initialized;
+    }
+    
+    
+    /***************************************************************************
+     * Uloží aktuální stav hry.
+     */
+    @Override
+    public void save() {
+        try {
+            serializeManager.save();
+        } catch (GameControlException ex) {
+            System.out.println("==============================================="
+                    + "\nException: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+    
+    
+    /***************************************************************************
+     * Naloaduje instance uložené hry
+     */
+    public void load(){
+        try {
+            serializeManager.load();
+        } catch (GameInitializeException ex) {
+            System.out.println("==============================================="
+                    + "\nException: " + ex.getMessage());
+            ex.printStackTrace();
+        }
     }
 
 
@@ -102,9 +190,12 @@ public class Game implements IGame
      * @param point souřadnice dotyku
      */
     @Override
-    public void processTouch(Point point)
+    public boolean processTouch(Point point)
     {
-        EXECUTOR.processTouch(point);
+        if(!initialized){
+            initialize();
+        }
+        return executor.processTouch(point);
     }
 
 
@@ -113,6 +204,7 @@ public class Game implements IGame
      *
      * @param listener posluchač, který má být přihlášen
      */
+    @Override
     public void addListener(IListener listener)
     {
         BROADCASTER.addListener(listener);
@@ -124,6 +216,7 @@ public class Game implements IGame
      *
      * @param listener posluchač, který má být odstraněn
      */
+    @Override
     public void removeListener(IListener listener)
     {
         BROADCASTER.removeListener(listener);
@@ -133,6 +226,7 @@ public class Game implements IGame
     /***************************************************************************
      * Informuje posluchače o změně
      */
+    @Override
     public void notifyListeners()
     {
         BROADCASTER.notifyListeners();

@@ -22,10 +22,10 @@ public interface IDrawable
 //== CONSTATS ==================================================================
 
     /** Defaultní pozice instance */
-    public final static Point DEFAULT_POSITION = new Point();
+    public final static Point DEFAULT_POSITION = new Point(0,0);
 
     /** Defaultní velikost instance */
-    public final static Point DEFAULT_SCALE = new Point();
+    public final static Point DEFAULT_SCALE = new Point(5,5);
 
     /** Defaultní priority vykreslení instance */
     public final static int DEFAULT_PRIORITY = 1;

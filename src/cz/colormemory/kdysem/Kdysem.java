@@ -3,10 +3,10 @@
  */
 package cz.colormemory.kdysem;
 
-import cz.colormemory.json.JSONConstructor;
-import cz.colormemory.json.JSONException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import cz.colormemory.kdysem.game.logic.Game;
+import cz.colormemory.kdysem.game.support.Logger;
+import java.awt.Point;
+
 
 
 
@@ -28,48 +28,24 @@ public class Kdysem
      */
     public static void main(String[] args)
     {
-        JSONConstructor json = new JSONConstructor();
-        try {
+        //Spustí loger, který vypisuje stav hry
+        Logger.getInstance();
 
-            json.object()
-                  .key("lab")
-                    .object()
-                        .key("name").value("Laboratoř s texty")
-                        .key("description").value("Výchozí místnost")
-                        .key("floor")
-                            .array()
-                                .value(0).value(0)
-                                .value(150).value(0)
-                                .value(150).value(150)
-                                .value(0).value(150)
-                            .endArray()
-                        .key("defaulPlayerPosition")
-                            .array()
-                                .value(10).value(10)
-                            .endArray()
-                        .key("neighbours")
-                            .array()
-                                .value("cabinet")
-                            .endArray()
-                        .key("items")
-                            .array()
-                                .object()
-                                    .key("name").value("Sifra")
-                                    .key("description").value("Muheeh Pointa celé hry")
-                                .endObject()
-                                .object()
-                                    .key("name").value("Kniha")
-                                    .key("description").value("Důležitá kniha")
-                                .endObject()
-                            .endArray()
-                    .endObject()
-                  .endObject();
+        // Vytvoří hru a inicializuje ji
+        Game game = Game.getInstance();
+        game.initialize();
+                    
+        //Simuluje dotek uživatele
+        game.processTouch(new Point(5,3)); //Přesun do laboratoře - zamčeno! --> DESCRIBE
+        game.processTouch(new Point(2,12)); //Sebrání hrnku - ještě nezkusil kávovar --> DESCRIBE
+        game.processTouch(new Point(18,3)); // Přesun do haly - mělo by fungovat.
+        game.processTouch(new Point(2,10)); // Kliknutí na kávovar, který sám o sobě nic neumí, může být jenom kombinován
+        
+        
+        game.save();
+        
+//        game.load();
 
-            System.out.println(json.toString());
-        }
-        catch (JSONException ex) {
-            Logger.getLogger(Kdysem.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
 

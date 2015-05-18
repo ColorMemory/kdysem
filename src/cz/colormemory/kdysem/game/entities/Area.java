@@ -1,8 +1,12 @@
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
-package cz.colormemory.kdysem.game.logic;
+package cz.colormemory.kdysem.game.entities;
 
+import cz.colormemory.json.JSONConstructor;
+import cz.colormemory.json.JSONException;
+import cz.colormemory.json.JSONObject;
+import cz.colormemory.kdysem.game.logic.RoomManager;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -22,10 +26,10 @@ import java.util.Collection;
  * @author  André HELLER
  * @version 1.00 — 02/2014
  */
-public enum Area 
+public enum Area
 {
 //== VALUES OF THE ENUMERATION TYPE ============================================
-  PRESENT_PRAGUE("",""),
+  PRESENT_PRAGUE("presentPrague",""),
   PRESENT_DAVLE("",""),
   BETWEEN_YEARS("",""),
   PAST_PRAGUE("",""),
@@ -36,6 +40,10 @@ public enum Area
 
 //== CONSTANT CLASS ATTRIBUTES =================================================
 //== VARIABLE CLASS ATTRIBUTES =================================================
+  
+    /** Actuální lokace */
+    private static Area actualArea;
+    
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
 
@@ -50,6 +58,26 @@ public enum Area
 
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
 //== CLASS GETTERS AND SETTERS =================================================
+    
+    /***************************************************************************
+     * Vrátí odkaz na aktuální lokaci
+     * 
+     * @return odkaz na aktuální lokaci
+     */
+    public static Area getActualArea(){
+        return actualArea;
+    }
+    
+    
+    /***************************************************************************
+     * Nastaví aktuální lokaci
+     * 
+     * @param area odkaz na lokaci
+     */
+    public static void setActualArea(Area area){
+        actualArea = area;
+    }
+    
 //== OTHER NON-PRIVATE CLASS METHODS ===========================================
 
 //##############################################################################
@@ -111,6 +139,54 @@ public enum Area
     public boolean addRoomToArea(Room room)
     {
         return ROOMS.add(room);
+    }
+    
+    /***************************************************************************
+     * Vrátí JSON reprezentující hodnoty ve všech místnostech dané lokace.
+     * 
+     * @return JSON se dvěma objekty. Jeden JSON objekt, označený jako rooms, 
+     * uchovává informace o mísnostech jako takových. Druhý objekt, označený 
+     * jako object, uchovává informace o herních objektech v místnostech.
+     * @throws cz.colormemory.json.JSONException
+     */
+    public JSONObject toJSON() throws JSONException {
+        JSONConstructor roomsJSON = new JSONConstructor();
+        JSONConstructor objectsJSON = new JSONConstructor();
+        boolean condition = true; //pomocná proměnné, zrychluje pozdější vyhodnocení výrazu níže
+        
+        roomsJSON.object();
+        objectsJSON.object();
+        
+        
+        for(Room room : ROOMS){
+            String current = "";
+            
+            if(condition && 
+                    room.equals(RoomManager.getInstance().getCurrentRoom())){
+                current = "@";
+                condition = false;
+            }
+            
+            JSONObject roomObject = room.toJSON();
+            
+            roomsJSON
+                    .key(current+room.getKey())
+                    .value(new JSONObject(roomObject.get("info").toString()));
+            
+            objectsJSON
+                    .key(room.getKey())
+                    .value(new JSONObject(roomObject.get("objects").toString()));
+            
+        }
+        
+        roomsJSON.endObject();
+        objectsJSON.endObject();
+        
+        return new JSONObject(new JSONConstructor()
+                .object()
+                    .key("rooms").value(new JSONObject(roomsJSON.toString()))
+                    .key("objects").value(new JSONObject(objectsJSON.toString()))
+                .endObject().toString());
     }
 
 

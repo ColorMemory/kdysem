@@ -1,0 +1,97 @@
+{
+  "02": {
+    "items": [10],
+    "transporters": [
+      12,
+      13
+    ],
+    "name": "Kancelář",
+    "floor": [
+      0,
+      0,
+      150,
+      0,
+      150,
+      150,
+      0,
+      150
+    ],
+    "description": "Kancelář profesora, zde najdete hrnek",
+    "persons": [11],
+    "playerPosition": [
+      0,
+      0
+    ]
+  },
+  "01": {
+    "items": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "transporters": [9],
+    "name": "Laboratoř",
+    "floor": [
+      0,
+      0,
+      150,
+      0,
+      150,
+      150,
+      0,
+      150
+    ],
+    "description": "Laboratoř, kde naleznete šifru",
+    "persons": [],
+    "playerPosition": [
+      0,
+      0
+    ]
+  },
+  "@03": {
+    "items": [1],
+    "transporters": [
+      3,
+      4
+    ],
+    "name": "Hala",
+    "floor": [
+      0,
+      0,
+      150,
+      0,
+      150,
+      150,
+      0,
+      150
+    ],
+    "description": "Hala univerzity, moc toho tu není",
+    "persons": [2],
+    "playerPosition": [
+      0,
+      0
+    ]
+  },
+  "04": {
+    "items": [],
+    "transporters": [],
+    "name": "Před univerzitou",
+    "floor": [
+      0,
+      0,
+      150,
+      0,
+      150,
+      150,
+      0,
+      150
+    ],
+    "description": "velké prsotorné nádvoří",
+    "persons": [],
+    "playerPosition": [
+      0,
+      0
+    ]
+  }
+}

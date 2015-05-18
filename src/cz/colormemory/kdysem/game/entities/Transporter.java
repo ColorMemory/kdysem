@@ -1,8 +1,11 @@
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
-package cz.colormemory.kdysem.game.logic;
+package cz.colormemory.kdysem.game.entities;
 
+import cz.colormemory.json.JSONConstructor;
+import cz.colormemory.json.JSONException;
+import cz.colormemory.kdysem.game.commands.CommandList;
 import java.awt.Point;
 
 
@@ -19,16 +22,24 @@ import java.awt.Point;
 public class Transporter extends AGameObject
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
+    
+    /** Výchozí pozice. která se ignoruje, pokud místnost obdrží tuto hodnotu, 
+     * nahradí je svojí výchozí pozicií */
+    public static final Point NULL_TARGET_POSITION = new Point(-1, -1);
+    
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
-//== CONSTANT INSTANCE ATTRIBUTES ==============================================
+//== CONSTANT INSTANCE ATTRIBUTES ==============================================    
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
 
     /** Cílová místnost */
-    private Room targetRoom;
+    private String targetRoomId;
 
     /** Cílové souřadnice v místnosti */
     private Point targetPosition;
+    
+    /** Boolean uzamčenosti transportéru. Pokud je zamený, nemůže přenášet */
+    private boolean locked;
 
 //== CLASS GETTERS AND SETTERS =================================================
 //== OTHER NON-PRIVATE CLASS METHODS ===========================================
@@ -44,55 +55,29 @@ public class Transporter extends AGameObject
      * @param description popis transportéru
      * @param targetRoom cílová místnost transportéru
      */
-    public Transporter(String name, String description, Room targetRoom)
+    public Transporter(String name, String[] description, String targetRoom)
     {
-        this(name, description, DEFAULT_PRIORITY, DEFAULT_POSITION,
-                DEFAULT_SCALE, targetRoom, targetRoom.getDefaultPlayerPosition());
+        this(name, description, new Placement(DEFAULT_PRIORITY, DEFAULT_POSITION,
+                DEFAULT_SCALE), targetRoom, NULL_TARGET_POSITION, false);
     }
-
-
+    
+    
     /***************************************************************************
-     * Základní s nastevenými údaji, které určují, kde přesně se má
-     * transportér zobrazit. Velikost transportéru a cílové souřadnice v
-     * cílové místnoti, se berou defaultně.
+     * Základní obecný konstruktor. Nastaví jméno, popis a cílovou místnost.
+     * Všechny souřadnice a velikosti bere defaultně.
      *
      * @param name název transportéru
      * @param description popis transportéru
-     * @param priority Priorita vykrelsení (vrstva)
-     * @param position pozice vykreslení
      * @param targetRoom cílová místnost transportéru
+     * @param locked stav uzamčení transportéru, pookud je zamknutý, neumožnuje přenášet
      */
-    public Transporter(String name, String description,
-                        int priority, Point position, Room targetRoom)
+    public Transporter(String name, String[] description, String targetRoom, boolean locked)
     {
-        this(name, description, priority, position, DEFAULT_SCALE, targetRoom,
-                targetRoom.getDefaultPlayerPosition());
+        this(name, description, new Placement(DEFAULT_PRIORITY, DEFAULT_POSITION,
+                DEFAULT_SCALE), targetRoom, NULL_TARGET_POSITION, locked);
     }
-
-
-    /***************************************************************************
-     * Kompletní konstruktor s rozdělnými údaji o umístění a vykreslení
-     * transportéru. Nastaví jméno, popis, prioritu vykrelsení,
-     * pozici vykrelsení, velikost vykreslení, cílovou místnost a
-     * cílovou pozici v cílové místnosti.
-     *
-     * @param name název transportéru
-     * @param description popis transportéru
-     * @param priority priorita vykreslení (vrstva)
-     * @param position pozice vykreslení v místnosti
-     * @param scale velikost vykreslení v místnosti
-     * @param targetRoom cílové místnost
-     * @param targetPosition cílové souračnice cílové místnosti
-     */
-    public Transporter(String name, String description,
-                        int priority, Point position, Point scale,
-                        Room targetRoom, Point targetPosition)
-    {
-        this(name, description, new Placement(priority, position, scale),
-                targetRoom, targetPosition);
-    }
-
-
+    
+    
     /***************************************************************************
      * Kompletní zjednodušený kontruktor. Od kompletního se liší v tom,
      * že informace o umístění a vykrelsení nepřjímá jednotlivě, ale
@@ -102,16 +87,37 @@ public class Transporter extends AGameObject
      * @param name název transportéru.
      * @param description popis transportéru
      * @param placement objet s umíštením a informacemi o vykreslení
-     * @param targetRoom cílová místnost
-     * @param targetPosition cílové souřednice v cílové místnosti
+     * @param targetRoomId cílová místnost
+     * @param locked stav uzamčení transportéru, pookud je zamknutý, neumožnuje přenášet
      */
-    public Transporter(String name, String description,
-                        Placement placement, Room targetRoom,
-                        Point targetPosition)
+    public Transporter(String name, String[] description,
+                        Placement placement, String targetRoomId, boolean locked)
+    {
+        this(name, description, placement, targetRoomId, NULL_TARGET_POSITION, locked);
+    }
+    
+    
+    /***************************************************************************
+     * Kompletní zjednodušený kontruktor. Od kompletního se liší v tom,
+     * že informace o umístění a vykrelsení nepřjímá jednotlivě, ale
+     * jako objekt {@link Placement}.
+     * Zavolá rodičovský konstruktor a inicializuje přidaná data.
+     *
+     * @param name název transportéru.
+     * @param description popis transportéru
+     * @param placement objet s umíštením a informacemi o vykreslení
+     * @param targetRoomId cílová místnost
+     * @param targetPosition cílové souřednice v cílové místnosti
+     * @param locked stav uzamčení transportéru, pookud je zamknutý, neumožnuje přenášet
+     */
+    public Transporter(String name, String[] description,
+                        Placement placement, String targetRoomId,
+                        Point targetPosition, boolean locked)
     {
         super(name, description, placement);
-        this.targetRoom = targetRoom;
+        this.targetRoomId = targetRoomId;
         this.targetPosition = targetPosition;
+        this.locked = locked;
     }
 
 
@@ -123,20 +129,20 @@ public class Transporter extends AGameObject
      *
      * @return odkaz na cílovou místnost
      */
-    public Room getTargetRoom()
+    public String getTargetRoomId()
     {
-        return targetRoom;
+        return targetRoomId;
     }
 
 
     /***************************************************************************
      * Nastaví transportéru cílovou místnost
      *
-     * @param targetRoom the targetRoom to set
+     * @param targetRoomId the targetRoom to set
      */
-    public void setTargetRoom(Room targetRoom)
+    public void setTargetRoomId(String targetRoomId)
     {
-        this.targetRoom = targetRoom;
+        this.targetRoomId = targetRoomId;
     }
 
 
@@ -160,6 +166,26 @@ public class Transporter extends AGameObject
     {
         this.targetPosition = targetPosition;
     }
+    
+    
+    /***************************************************************************
+     * Vrací informaci o uzamčenosti transportéru, když je uzamčen, tak nepřenáší.
+     * 
+     * @return uzamčenost transportéru.
+     */
+    public boolean isLocked(){
+        return locked;
+    }
+    
+    
+    /***************************************************************************
+     * Nastaví parametr uzamčenosti. Zamčený nepřenáší.
+     * 
+     * @param locked boolean uzamčenosti.
+     */
+    public void setLocked(boolean locked){
+        this.locked = locked;
+    }
 
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
 
@@ -171,7 +197,52 @@ public class Transporter extends AGameObject
     @Override
     public CommandList touch()
     {
-        return CommandList.TRANSPORT;
+        if(isLocked()){
+            return CommandList.DESCRIBE;
+        }
+        else {
+            return CommandList.TRANSPORT;
+        }
+    }
+    
+    
+    /***************************************************************************
+     * Převede instanci transporteru na JSON string
+     * 
+     * @return Neformátovaný JSON string reprezentující instanci
+     * {
+            "position": "java.awt.Point[x=0,y=0]",
+            "name": "Koupelna",
+            "priority": 1,
+            "description": "Vlez do vany",
+            "target": "03"
+        }
+     * 
+     * @throws cz.colormemory.json.JSONException pokud se v JSONU vyskytne 
+     * syntaktická chyba
+     */
+    @Override
+    public String toJSONString() throws JSONException {
+        JSONConstructor json = new JSONConstructor();
+        
+        json.object()
+                .key("name").value(super.getName())
+                .key("description").array();
+
+        for(String description : super.getDescription()){
+                json.value(description);
+        }
+            json.endArray()
+                .key("priority").value(super.getPriority())
+                .key("position").array()
+                    .value(super.getPosition().x)
+                    .value(super.getPosition().y)
+                .endArray()
+                .key("target").value(getTargetRoomId())
+                .key("locked").value(isLocked())
+        .endObject();
+        
+        return json.toString();
     }
 
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================

@@ -3,6 +3,9 @@
  */
 package cz.colormemory.kdysem.game.logic;
 
+import java.io.File;
+import java.util.Properties;
+
 
 
 /*******************************************************************************
@@ -12,13 +15,9 @@ package cz.colormemory.kdysem.game.logic;
  * @author  André HELLER
  * @version 1.00 — 02/2014
  */
-public class StateManager
+public class StateManager extends Properties
 {
-//== CONSTANT CLASS ATTRIBUTES =================================================
-
-    /** Odkaz na jedináčka */
-    private static final StateManager SINGLETON = new StateManager();
-
+//== CONSTANT CLASS ATTRIBUTES =================================================    
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
@@ -34,27 +33,21 @@ public class StateManager
 
 //##############################################################################
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
-
-    /***************************************************************************
-     * Tovarání metoda. Vrátí odkaz na jedináčka.
-     *
-     * @return odkaz ne jedináčka.
-     */
-    public static StateManager getInstnace()
-    {
-        return SINGLETON;
-    }
-
+    
     /***************************************************************************
      * Privátní konstruktor zabraňující vytvoření instance
      */
-    private StateManager(){}
+    public StateManager(){
+        super();
+        this.setProperty("folder.config", System.getProperty("user.dir") +
+                                   File.separator +
+                                   "config");
+    }
 
-
-
+    
 //== ABSTRACT METHODS ==========================================================
 //== INSTANCE GETTERS AND SETTERS ==============================================
-
+    
     /***************************************************************************
      * Vrátí souřadnicový rozdíl osy X mezi místností a její částí
      * zobrazenou na displayi. Například, když je místnost širší než display,

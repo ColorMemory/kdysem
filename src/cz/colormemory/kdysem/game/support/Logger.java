@@ -1,43 +1,40 @@
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
-package cz.colormemory.kdysem.game.logic;
+package cz.colormemory.kdysem.game.support;
 
-
-import java.awt.Point;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-
-
-
+import cz.colormemory.kdysem.framework.IListener;
+import cz.colormemory.kdysem.game.entities.AGameObject;
+import cz.colormemory.kdysem.game.logic.Game;
+import cz.colormemory.kdysem.game.logic.Inventory;
+import cz.colormemory.kdysem.game.logic.RoomManager;
 
 
 
 
 
 /*******************************************************************************
- * Třída {@code Initializator} je jedináček představující inicializační třídu hry.
- * Zajistí správné vytvoření všechn objektů a funkčností.
+ * Třída {@code Game} je jedináček a představuje základní funkčnost celé hry.
+ * Je vlastně jejím správcem. Ostatní přímo nesouvisející třídy se u
+ * ní mohou přihlásit jako posluchači grafiky, zvuku apod.
  *
  * @author  André HELLER
- * @version 1.00 — mm/2013
+ * @version 1.00 — 02/2014
  */
-public class Initializator
+public class Logger implements IListener
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
 
     /** Odkaz na jedináčka */
-    private static final Initializator SINGLETON = new Initializator();
+    private static final Logger SINGLETON = new Logger();
 
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
-
-    /** Odkaz na správce místností */
-    private final RoomManager ROOM_MANAGER = RoomManager.getInstance();
-
+    
+    /** Odklaz na hlavní třídu hry */
+    private final Game GAME;
+    
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
 //== CLASS GETTERS AND SETTERS =================================================
 //== OTHER NON-PRIVATE CLASS METHODS ===========================================
@@ -46,22 +43,23 @@ public class Initializator
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
 
     /***************************************************************************
-     * Tovární metoda vrací odkaz na vytvořenou instanci.
+     * Tovární metoda vrátí odkaz na jedináčka.
      *
-     * @return singleton
+     * @return odkaz na jedináčka
      */
-    public static Initializator getInstance()
+    public static Logger getInstance()
     {
         return SINGLETON;
     }
 
 
     /***************************************************************************
-     *
+     * Privátní konstruktor zabraňující vytvoření instance
      */
-    public Initializator()
+    private Logger()
     {
-
+        this.GAME = Game.getInstance();
+        this.GAME.addListener(this);
     }
 
 
@@ -69,25 +67,40 @@ public class Initializator
 //== ABSTRACT METHODS ==========================================================
 //== INSTANCE GETTERS AND SETTERS ==============================================
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
-
+    
     /***************************************************************************
-     * Hlavní inicicalizační metoda. Vytvoří základní místnosti hry i s obsahem.
+     * 
      */
-    public void initialize()
-    {
-
-//        Room sandbox = ROOM_MANAGER.createRoom("Sandbox", "Cvičná místnost ke zkoušení hry",
-//                                                          Area.PRESENT_PRAGUE, new Point(0, 0));
-//
-//        Room sandbox2 = ROOM_MANAGER.createRoom("Sandbox2", "Cvičná místnost ke zkoušení hry",
-//                                           Area.PRESENT_PRAGUE, new Point(0, 0));
-//
-//
-//        sandbox.addObjectToRoom(new Transporter("Sousedství", "Přestěhuje člověka do sousedství", 1, new Point(0,1), sandbox2));
-
-
+    @Override
+    public void notice() {
+        RoomManager roomManager = RoomManager.getInstance();
+        
+        
+        StringBuilder sb = new StringBuilder();
+        
+        if(roomManager.getCurrentRoom() == null){
+            return;
+        }
+        
+        sb.append("===========================================================")
+          .append("\nAktuální stav hry:").append("\n---------------------------")
+          .append("\n\nAktuální místnost: ").append(roomManager.getCurrentRoom().getName())
+          .append("\n\nObsah: \n");
+        
+        for(AGameObject gameObject : roomManager.getCurrentRoom().getRoomObjects()){
+            sb.append("- ").append(gameObject.getClass().getName()).append(": ").append(gameObject.getName()).append("\n");
+        }
+        
+        Inventory inventory = Inventory.getInstance();
+        sb.append("\nINVENTORY:");
+        
+        for(AGameObject gameObject : inventory.getAllItems()){
+            sb.append("- ").append(gameObject.getName()).append("\n");
+        }
+        
+        System.out.println(sb.toString());
     }
-
+    
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
 //== PRIVATE AND AUXILIARY INSTANCE METHODS ====================================
 //== EMBEDDED TYPES AND INNER CLASSES ==========================================
@@ -98,13 +111,7 @@ public class Initializator
 //     */
 //    public static void test()
 //    {
-//        Initializator inst = new Initializator();
-//        try {
-//            inst.initialize();
-//        }
-//        catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
+//        Game inst = new Game();
 //    }
 //    /** @param args Command line arguments - not used. */
 //    public static void main(String[] args)  {  test();  }

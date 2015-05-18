@@ -3,9 +3,14 @@
  */
 package cz.colormemory.kdysem.game.logic;
 
+import cz.colormemory.kdysem.game.entities.Room;
+import cz.colormemory.kdysem.game.entities.Area;
+import cz.colormemory.kdysem.game.entities.AGameObject;
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 
 
@@ -30,7 +35,7 @@ public class RoomManager
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
 
     /** Kolekce, všech herních místností */
-    private final Collection<Room> ROOM_LIST = new ArrayList<>();
+    private final Map<String,Room> ROOM_LIST = new HashMap<>();
 
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
 
@@ -63,6 +68,16 @@ public class RoomManager
 //== INSTANCE GETTERS AND SETTERS ==============================================
 
     /***************************************************************************
+     * Vrátí místnost na základě klíče
+     * 
+     * @param key klíč místnosti
+     * @return místnost
+     */
+    public Room getRoom(String key){
+        return  ROOM_LIST.get(key);
+    }
+    
+    /***************************************************************************
      * Vrátí aktuální mistnost
      *
      * @return aktuální mistnost
@@ -88,32 +103,19 @@ public class RoomManager
      * Vytvoří novou místnost a pridá jí do kolekce místností.
      * 
      * 
+     * @param key klíč, pod kterým se mísnost uloží v hashmapě
      * @param name název místnosti
      * @param description popis místnosti
      * @param area lokace místnosti
      * @param defaultPlayerPosition Výchozí pozice hráče po vstupu do místnosti
-     * @return úspěšnost vytvoření
+     * @return odkaz na místnost
      */
-    public Room createRoom(String name, String description, Area area,
+    public Room createRoom(String key, String name, String description, Area area,
                               Point defaultPlayerPosition)
     {
-        Room newRoom = new Room(name, description, area, defaultPlayerPosition);
-        addRoomToList(newRoom);
+        Room newRoom = new Room(key, name, description, area, defaultPlayerPosition);
+        addRoomToList(key, newRoom);
         return newRoom;
-    }
-
-
-    /***************************************************************************
-     * Přidá místnost do kolekce všech místností. A také do kolekce své lokace.
-     *
-     * @param room nová místnost
-     */
-    public void addRoomToList(Room room)
-    {
-        Area area = room.getArea();
-        area.addRoomToArea(room);
-        
-        this.ROOM_LIST.add(room);
     }
 
 
@@ -154,17 +156,47 @@ public class RoomManager
 
             if(point.x >= objectPosition.x && point.x <= objectPosition.x + objectScale.x &&
                point.y >= objectPosition.y && point.y <= objectPosition.y + objectScale.y){
-                touchObject =  object;
-                break;
+                if(touchObject != null){
+                    touchObject = touchObject.getPriority() < object.getPriority() ? object : touchObject;
+                    
+                    //@todo shoda Priorit: nebere v potaz, pokud jsou na stejných souřadnicich dva objekty se stejnou prioritou, nutno někde ošetřit, ale asi budou lepší místa, až se bdue vykraslovat grafika, možná v inicializaci.
+                }
+                else {
+                    touchObject = object;
+                }
             }
         }
 
         return touchObject;
     }
+    
+    
+    /***************************************************************************
+     * Vrátí kolekci všech místností
+     * 
+     * @return kolekce bšech místností
+     */
+    public Map<String, Room> getAllRooms(){
+        return Collections.unmodifiableMap(ROOM_LIST);
+    }
 
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
 //== PRIVATE AND AUXILIARY INSTANCE METHODS ====================================
+    
+    /***************************************************************************
+     * Přidá místnost do kolekce všech místností. A také do kolekce své lokace.
+     *
+     * @param room nová místnost
+     */
+    private void addRoomToList(String key, Room room)
+    {
+        Area area = room.getArea();
+        area.addRoomToArea(room);
+        
+        this.ROOM_LIST.put(key,room);
+    }
+    
 //== EMBEDDED TYPES AND INNER CLASSES ==========================================
 //== TESTING CLASSES AND METHODS ===============================================
 //

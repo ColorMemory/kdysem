@@ -1,23 +1,24 @@
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
-package cz.colormemory.kdysem.game.logic;
-
-
+package cz.colormemory.kdysem.game.exceptions;
 
 /*******************************************************************************
- * Instances of class {@code CommandUse} represent ...
  *
- * @author  André HELLER
- * @version 1.00 — 02/2014
+ * @author Avatar
  */
-public class CommandUse extends ACommand
-{
+public class GameControlException extends Exception{
 //== CONSTANT CLASS ATTRIBUTES =================================================
+    
+    /** serial Version UID */
+    private static final long serialVersionUID = 13542311863L;
+    
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
+    
+    private Exception previous;
 //== CLASS GETTERS AND SETTERS =================================================
 //== OTHER NON-PRIVATE CLASS METHODS ===========================================
 
@@ -25,29 +26,35 @@ public class CommandUse extends ACommand
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
 
     /***************************************************************************
-     *
+     * Implicitní konstruktor
+     * @param message
      */
-    public CommandUse()
-    {
+    public GameControlException(String message){
+        super(message);
     }
-
+    
+    public GameControlException(String message, Exception previous){
+        super(message);
+        this.previous = previous;
+    }
 
 
 //== ABSTRACT METHODS ==========================================================
 //== INSTANCE GETTERS AND SETTERS ==============================================
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
-
+    
     /***************************************************************************
-     *
-     * @param touchObject
-     * @return
+     * 
      */
     @Override
-    public boolean execute(AGameObject touchObject)
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void printStackTrace() {
+        super.printStackTrace(); 
+        
+        if(previous != null){
+            previous.printStackTrace();
+        }
     }
-
+    
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
 //== PRIVATE AND AUXILIARY INSTANCE METHODS ====================================
 //== EMBEDDED TYPES AND INNER CLASSES ==========================================
@@ -58,7 +65,7 @@ public class CommandUse extends ACommand
 //     */
 //    public static void test()
 //    {
-//        CommandUse inst = new CommandUse();
+//        Broadcaster inst = new Broadcaster();
 //    }
 //    /** @param args Command line arguments - not used. */
 //    public static void main(String[] args)  {  test();  }

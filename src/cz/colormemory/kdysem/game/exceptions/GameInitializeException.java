@@ -1,30 +1,24 @@
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
-package cz.colormemory.kdysem.game.logic;
-
-
-
-
+package cz.colormemory.kdysem.game.exceptions;
 
 /*******************************************************************************
- * Instance třídy {@code Button} představují tlačítko invetáře, které nějak aktivuje vybrané věci.
- * Nutno domyslet a dopsat.
  *
- * @author  André HELLER
- * @version 1.00 — 02/2014
+ * @author Avatar
  */
-public class Button extends AGameObject
-{
+public class GameInitializeException extends Exception{
 //== CONSTANT CLASS ATTRIBUTES =================================================
-
-    /** Odkaz na inventář */
-    private static final Inventory INVENTORY = Inventory.getInstance();
-
+    
+    /** serial Version UID */
+    private static final long serialVersionUID = 13542311863L;
+    
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
+    
+    private Exception previous;
 //== CLASS GETTERS AND SETTERS =================================================
 //== OTHER NON-PRIVATE CLASS METHODS ===========================================
 
@@ -32,35 +26,35 @@ public class Button extends AGameObject
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
 
     /***************************************************************************
-     * Deafultní konstruktor. NUTNÉ PŘIDAT DALŠÍ TYPY A CELKOVĚ JE LÉPE DOMYSLET
+     * Implicitní konstruktor
+     * @param message
      */
-
-    public Button()
-    {
-        super("", "", new Placement());
+    public GameInitializeException(String message){
+        super(message);
     }
-
+    
+    public GameInitializeException(String message, Exception previous){
+        super(message);
+        this.previous = previous;
+    }
 
 
 //== ABSTRACT METHODS ==========================================================
 //== INSTANCE GETTERS AND SETTERS ==============================================
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
-
+    
     /***************************************************************************
-     * Zděděná metoda. Spouštěč herních příkazů.
-     *
-     * Musí se dopsat, bude to něco na procipu, když bude v inventáři víc vybraných položek, bude je kombinovat jinak je bde interagovat a dávat do výberu, který zatím také asi nen vytvořen.
-     *
-     * @return typ spouštěného příkazu
+     * 
      */
     @Override
-    public CommandList touch()
-    {
-        return CommandList.COMBINE;
-        //return CommandList.INTERACTION;
+    public void printStackTrace() {
+        super.printStackTrace(); 
+        
+        if(previous != null){
+            previous.printStackTrace();
+        }
     }
-
-
+    
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
 //== PRIVATE AND AUXILIARY INSTANCE METHODS ====================================
 //== EMBEDDED TYPES AND INNER CLASSES ==========================================
@@ -71,7 +65,7 @@ public class Button extends AGameObject
 //     */
 //    public static void test()
 //    {
-//        Button inst = new Button();
+//        Broadcaster inst = new Broadcaster();
 //    }
 //    /** @param args Command line arguments - not used. */
 //    public static void main(String[] args)  {  test();  }
