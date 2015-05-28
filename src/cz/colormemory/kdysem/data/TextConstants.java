@@ -31,8 +31,9 @@ public class TextConstants
         AREA_FILE_WRONG_SYNTAX = "Soubory lokace \"%s\" jsou v nesprávném tvaru.\n",
         AREA_JSON_IS_NULL = "Soubory lokace se špatně přečetli a nedokázali vytvořit instanci JSONObjectu tak, že to neochytila ani IO ani JSON vyjímka.\n KOMU SE TOHLE ZOBRAZÍ MÁ U MĚ PIVO. StackTrace a okolnosti prosím zapsat!!\n",
         INSTANCES_CREATING_SYNTAX_ERROR = "Při vytváření instancí mísností a herních objektů se někde posral JSON.\n",
-        AREA_SAVE_FILE_FILE_CREATE_ERROR = "Hra se nepodařila uložit do sobouru.\n",
-        AREA_SAVE_FILE_WRONG_SYNTAX = "Hra generuje nevalidní JSON, nejde tedy uložit.\n";
+        SAVE_FILE_CREATE_ERROR = "Hra se nepodařila uložit do sobouru.\n",
+        SAVE_FILE_WRONG_SYNTAX = "Hra generuje nevalidní JSON, nejde tedy uložit.\n";
+        
     
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================

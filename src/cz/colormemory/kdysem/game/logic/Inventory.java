@@ -3,6 +3,9 @@
  */
 package cz.colormemory.kdysem.game.logic;
 
+import cz.colormemory.json.JSONConstructor;
+import cz.colormemory.json.JSONException;
+import cz.colormemory.json.JSONObject;
 import cz.colormemory.kdysem.game.entities.Item;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,8 +15,9 @@ import java.util.Collection;
 
 
 /*******************************************************************************
- * Třída {@code Inventory} je jedináček představující herní inventář.
- * Tedy schránku na jednotlivé itemy, které si hráč během hry různě přenáší.
+ * Třída {@code Inventory} Představuje herní invetář, kam si hráč může ukládat 
+ * instance třídy {@link Item} a nosit si je s sebou mezi jednotlivými 
+ * mistnostmi.
  *
  * @author  André HELLER
  * @version 1.00 — 02/2014
@@ -21,46 +25,38 @@ import java.util.Collection;
 public class Inventory
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
-
-    /** Jediná vytvoření instance inventáře = jedináček */
-    private static final Inventory SINGLETON = new Inventory();
-
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
 
-    /** kolekce itemů */
-    private final Collection<Item> ITEM_LIST = new ArrayList<>();
+    /** Seznam itemů */
+    private final ArrayList<Item> ITEM_LIST = new ArrayList<>();
 
-    /** kolekce itemů */
-    private final Collection<Item> SELECTED_LIST = new ArrayList<>();
-    
     /** Maximal capacity */
     private final int MAX_CAPACITY = 10;
 
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
+    
+    /** Ukazuje, zda je inventář aktuálně zobrazený nebo ne */
+    private boolean active = false;
+    
+    /** Aktuálně vybraný prvek */
+    private Item selectedItem = null;    
+    
 //== CLASS GETTERS AND SETTERS =================================================
 //== OTHER NON-PRIVATE CLASS METHODS ===========================================
 
 //##############################################################################
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
 
+    
     /***************************************************************************
-     * Vrátí odkaz na jedináčka.
-     *
-     * @return odkaz an jedináčka.
+     * Implicitní konstruktor
      */
-    public static Inventory getInstance()
+    public Inventory()
     {
-        return SINGLETON;
+
     }
-
-
-    /***************************************************************************
-     * Privátní konstruktor zabraňující vytvoření instance.
-     */
-    private Inventory()
-    {/* ... */}
 
 
 
@@ -79,13 +75,43 @@ public class Inventory
 
 
     /***************************************************************************
-     * Vrátí koleci označených itemů v inventáři.
+     * Vrátí označených item v inventáři.
      *
-     * @return kolekce označených itemů v inventáři.
+     * @return označených item v inventáři.
      */
-    public Collection<Item> getSelectedItems()
+    public Item getSelectedItem()
     {
-        throw new UnsupportedOperationException("Not yet");
+        return selectedItem;
+    }
+    
+    
+    /***************************************************************************
+     * Vrátí hodnotu maximální kapacity inventáře
+     * 
+     * @return maximální kapacita
+     */
+    public int getMaxCapacity() {
+        return MAX_CAPACITY;
+    }
+    
+    
+    /***************************************************************************
+     * Ukazuje, zda je inventář aktuálně zobrazený nebo ne
+     * 
+     * @return the active
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /***************************************************************************
+     * Nastaví, zda je inventář aktuálně zobrazený nebo ne
+     * 
+     * @param active the active to set
+     */
+    public void setActive(boolean active) {
+        System.out.println(">>> TOGGLE INVENTORY\n===========================================================");
+        this.active = active;
     }
 
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
@@ -98,7 +124,13 @@ public class Inventory
      */
     public boolean addItem(Item item)
     {
-        return ITEM_LIST.add(item);
+        if(ITEM_LIST.size() <= MAX_CAPACITY){
+            return ITEM_LIST.add(item);
+        }
+        else {
+            return false;
+        }
+        
     }
 
 
@@ -117,33 +149,47 @@ public class Inventory
     /***************************************************************************
      * Přidá do kolekce vybraných věcí
      *
-     * @param item item, který se přidá do kolekce.
-     * @return úspěšnost vložení do kolekce.
+     * @param index
+     * @return vybraný item
      */
-    public boolean selectItem(Item item)
+    public Item selectItem(int index)
     {
-        return SELECTED_LIST.add(item);
+        selectedItem = ITEM_LIST.get(index);
+        System.out.println(">>> SELECT: " + selectedItem.getName() + "\n===========================================================");
+        return selectedItem;
     }
 
 
     /***************************************************************************
      * Odebre z kolekce vybraných věcí
      *
-     * @param item item, který se odebere z kolekce.
-     * @return úspěšnost odebrání z kolekce.
      */
-    public boolean unselectItem(Item item)
+    public void unselectItem()
     {
-        return SELECTED_LIST.remove(item);
+        selectedItem = null;
     }
     
+    
     /***************************************************************************
-     * Vrátí hodnotu maximální kapacity inventáře
+     * Vrací JSONObject reprezentující objekty v inventáři
      * 
-     * @return maximální kapacita
+     * @return JSONOBject reprezentující itemy v inventáři
+     * @throws JSONException při syntaktické JSON chybě
      */
-    public int getMaxCapacity() {
-        return MAX_CAPACITY;
+    public JSONObject toJSON() throws JSONException{
+        JSONConstructor inventoryJSONConstructor = new JSONConstructor();
+           
+        inventoryJSONConstructor.object();
+
+        for(Item item : getAllItems()){
+            inventoryJSONConstructor
+                    .key(item.getId()+"")
+                    .value(new JSONObject(item.toJSONString()));
+        }
+
+        inventoryJSONConstructor.endObject();
+            
+        return new JSONObject(inventoryJSONConstructor.toString());
     }
 
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================

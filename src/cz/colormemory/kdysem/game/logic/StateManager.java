@@ -9,14 +9,17 @@ import java.util.Properties;
 
 
 /*******************************************************************************
- * Třída {@code StateManager} je jedináček představující správce nejrůznějších
- * herních stavů.
+ * Třída {@code StateManager} je jedináček představující konfiguraci hry. Má v 
+ * sobě uložené všechny herní konfigurační proměnné
  *
  * @author  André HELLER
- * @version 1.00 — 02/2014
+ * @version 1.1 — 05/2015
  */
 public class StateManager extends Properties
 {
+    /** Serial UID */
+    private static final long serialVersionUID = 121213225312621034L;
+    
 //== CONSTANT CLASS ATTRIBUTES =================================================    
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
@@ -35,13 +38,13 @@ public class StateManager extends Properties
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
     
     /***************************************************************************
-     * Privátní konstruktor zabraňující vytvoření instance
+     * Implicitní kontruktor. Zajištuje nastavení jediné vlastnosti -> název 
+     * složky s konfiguračním souborem.
      */
     public StateManager(){
         super();
-        this.setProperty("folder.config", System.getProperty("user.dir") +
-                                   File.separator +
-                                   "config");
+        this.setProperty("folder.config", 
+                System.getProperty("user.dir") + File.separator + "config");
     }
 
     

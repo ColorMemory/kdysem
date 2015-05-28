@@ -1,0 +1,26 @@
+{
+  "15": {
+    "position": [
+      4,
+      18
+    ],
+    "interactability": false,
+    "name": "Bankovky",
+    "priority": 1,
+    "description": ["Bankovky"],
+    "pickability": true,
+    "usability": true
+  },
+  "14": {
+    "position": [
+      22,
+      10
+    ],
+    "interactability": true,
+    "name": "Mince",
+    "priority": 1,
+    "description": ["Toto je mince do automatu"],
+    "pickability": true,
+    "usability": true
+  }
+}

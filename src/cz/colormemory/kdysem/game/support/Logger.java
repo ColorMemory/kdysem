@@ -14,12 +14,12 @@ import cz.colormemory.kdysem.game.logic.RoomManager;
 
 
 /*******************************************************************************
- * Třída {@code Game} je jedináček a představuje základní funkčnost celé hry.
- * Je vlastně jejím správcem. Ostatní přímo nesouvisející třídy se u
- * ní mohou přihlásit jako posluchači grafiky, zvuku apod.
+ * Třída {@code Logger} je podpůrnou třídou, který do konzole vypisuje aktuální 
+ * stav hry. Je přihlášena jako posluchač ke hře a kdykoliv hra vydá nofotokaci,
+ * vypíše kompletní stav.
  *
  * @author  André HELLER
- * @version 1.00 — 02/2014
+ * @version 1.10 — 05/2014
  */
 public class Logger implements IListener
 {
@@ -54,7 +54,7 @@ public class Logger implements IListener
 
 
     /***************************************************************************
-     * Privátní konstruktor zabraňující vytvoření instance
+     * Získá instanci třídy Game a přihlásí se u ní jako posluchač.
      */
     private Logger()
     {
@@ -69,12 +69,14 @@ public class Logger implements IListener
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
     
     /***************************************************************************
-     * 
+     * Metoda posluchače. Reaguje na notifikaci od hry. Vypíše do konzole 
+     * formátovaný stav hry. Informace o aktuální místnosti, jejím obsahu a 
+     * obsahu inventáře.
      */
     @Override
     public void notice() {
-        RoomManager roomManager = RoomManager.getInstance();
-        
+        RoomManager roomManager = GAME.getRoomManager();
+        Inventory inventory = GAME.getInventory();
         
         StringBuilder sb = new StringBuilder();
         
@@ -83,20 +85,20 @@ public class Logger implements IListener
         }
         
         sb.append("===========================================================")
-          .append("\nAktuální stav hry:").append("\n---------------------------")
-          .append("\n\nAktuální místnost: ").append(roomManager.getCurrentRoom().getName())
-          .append("\n\nObsah: \n");
+          .append("\nRoom: ").append(roomManager.getCurrentRoom().getName().toUpperCase())
+          .append("\n\nContent: \n");
         
         for(AGameObject gameObject : roomManager.getCurrentRoom().getRoomObjects()){
-            sb.append("- ").append(gameObject.getClass().getName()).append(": ").append(gameObject.getName()).append("\n");
+            sb.append("- ").append(gameObject.getClass().getSimpleName()).append(": ").append(gameObject.getName().toUpperCase()).append("\n");
         }
-        
-        Inventory inventory = Inventory.getInstance();
-        sb.append("\nINVENTORY:");
+                
+        sb.append("\nInventory: \n");
         
         for(AGameObject gameObject : inventory.getAllItems()){
-            sb.append("- ").append(gameObject.getName()).append("\n");
+            sb.append("- ").append(gameObject.getName().toUpperCase()).append("\n");
         }
+        
+        sb.append("===========================================================");
         
         System.out.println(sb.toString());
     }

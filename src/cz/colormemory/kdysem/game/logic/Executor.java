@@ -5,6 +5,7 @@ package cz.colormemory.kdysem.game.logic;
 
 import cz.colormemory.kdysem.game.commands.CommandList;
 import cz.colormemory.kdysem.game.entities.AGameObject;
+import cz.colormemory.kdysem.game.support.ITouchable;
 import java.awt.Point;
 
 
@@ -12,11 +13,13 @@ import java.awt.Point;
 
 
 /*******************************************************************************
- * Třída {@code Executor} je jedináček představující hlavní řídící třídu
- * vnitřní logiku hry.
+ * Třída {@code Executor} je vykonavatelem herní logiky. V zásadě dokáže použe 
+ * zpracovat dotek uživatele delegovanou třídou hry. To však zahrnuje různé 
+ * přepočty souřadnic, výběr a prioritizaci správného předmětu, vykonání 
+ * samotného příkazu a následné upozorněrnění posluchačů, že došlo ke změně.
  *
  * @author  André HELLER
- * @version 1.00 — 02/2014
+ * @version 2.00 — 05/2015
  */
 public class Executor
 {
@@ -29,8 +32,9 @@ public class Executor
     private final Game GAME = Game.getInstance();
 
     /** Odkaz na správce mísností */
-    private final RoomManager ROOM_MANAGER = RoomManager.getInstance();
+    private final RoomManager ROOM_MANAGER = GAME.getRoomManager();
     
+    /** Odkaz na správce stavů */
     private final StateManager STATE_MANAGER = GAME.getStateManager();
 
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
@@ -41,7 +45,7 @@ public class Executor
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
     
     /***************************************************************************
-     * Privátní konstruktor zabřanující vytvoření instance.
+     * Implicitní kontruktor
      */
     public Executor()
     {
@@ -54,41 +58,70 @@ public class Executor
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
 
     /***************************************************************************
-     * Metoda by měla předat získané souřadnice na překladatele souřadnic
-     * {@link CoordinateTranslator}, který přepočitá displayové souřadnice
-     * na ty mapové. Následně pomocí nich získá přístup k objektu, který se
-     * v místnosti nachází právě na zadaných souřadnicích. Objekt o sobě ukládá
-     * svoje stavy a podle toho ví, který příkaz se má zavolat, tento příkaz nám
-     * ve forme enum {@link CommandList} vrátí. Náslědně pak an příkaz zavoláme
-     * spouštěcí metodu, zjistíme, úspěšnost spuštění a dáme vědět posluchačům,
-     * že nastale nějaká změna.
+     * Metoda by měla přepočítat získané souřadnicena na ty mapové nebo 
+     * alternativně inventářové Následně pomocí nich získá přístup k objektu, 
+     * který se v místnosti nachází právě na zadaných souřadnicích. Objekt o sobě
+     * ukládá svoje stavy a podle toho ví, který příkaz se má zavolat, tento 
+     * příkaz nám ve formě enum {@link CommandList} vrátí. Náslědně pak na příkaz
+     * zavoláme spouštěcí metodu, zjistíme, úspěšnost spuštění a dáme vědět 
+     * posluchačům, že nastale nějaká změna.
      *
      * @param coordinates souřadnice dotyku
      * @return 
      */
     public boolean processTouch(Point coordinates)
     {
-
-        /* Přepočítá souřadnice */
-        Point roomCoord = calculateRoomShift(coordinates);
-
         boolean isExecute = false;
-
-        /* ziskam od room managera pres souradnice odkaz na AGameObject */
-        try {
-            AGameObject touchobject = ROOM_MANAGER.getRoomObjectOn(roomCoord);
-
-            /* zavolam jeho metodu touch, ta by měla vědět o co se snazim a vratit
-            mi typ prikazu Command list */
-            CommandList executeCmd = touchobject.touch();
-
-            isExecute = executeCmd.execute(touchobject);
+        
+        //Pokud má hra otevřený inventář, neprohledává místnost ale jej.
+        if(GAME.getInventory().isActive()){
+            Inventory inv = GAME.getInventory();
+            
+            //nastavení tabulky inventáře (počet řádků, sloupců a pixelovou vzálednost strany čtvěrcového políčka))
+            int interval = 5;
+            int colsCount = 10;
+            int rowsCount = 4;
+            
+            //Upravení hraničních souřadnic na pravém a dolním kraji tabulky
+            int xException = interval*colsCount;
+            int yException = interval*rowsCount;
+            coordinates.x = coordinates.x % xException == 0 ? coordinates.x - 1 : coordinates.x;
+            coordinates.y = coordinates.y % yException == 0 ? coordinates.y - 1 : coordinates.y;
+            
+            int xIndex = coordinates.x/interval;
+            int yIndex = coordinates.y/interval;
+            
+            //podle souřadnic získá hodnotu indexu v inventáři
+            inv.selectItem(xIndex + (yIndex*colsCount));
+            
+            isExecute = true;
         }
-        catch (NullPointerException e){
-            //Na zadaných souřadnicích neí žádný objekt a nedá se nic dělat - nutné nějak dopojistitit !!!!!!!!!!!!!!!
-            System.out.println("Nic nanalezeno!");
+        else {
+        
+            /* Přepočítá souřadnice */
+            Point roomCoord = calculateRoomShift(coordinates);
+
+
+            /* ziskam od room managera pres souradnice odkaz na AGameObject */
+            try {
+                ITouchable touchobject = ROOM_MANAGER.getRoomObjectOn(roomCoord);
+
+                /* zavolam jeho metodu touch, ta by měla vědět o co se snazim a vratit
+                mi typ prikazu Command list */
+                CommandList executeCmd = touchobject.touch();
+
+                //Přetypuje na gameobject
+                if(touchobject instanceof AGameObject){
+                    isExecute = executeCmd.execute((AGameObject) touchobject);
+                }
+            }
+            catch (NullPointerException e){
+                //Na zadaných souřadnicích neí žádný objekt a nedá se nic dělat - nutné nějak dopojistitit !!!!!!!!!!!!!!!
+                System.out.println("Nic nanalezeno!");
+            }
         }
 
+        //Pokud se povědlo vykonat příkaz upozorní poslcuhače.
         if(isExecute){
             GAME.notifyListeners();
             return true;

@@ -5,8 +5,9 @@ package cz.colormemory.kdysem.game.commands;
 
 import cz.colormemory.kdysem.game.entities.AGameObject;
 import cz.colormemory.kdysem.game.entities.Item;
-import cz.colormemory.kdysem.game.logic.Inventory;
 import cz.colormemory.kdysem.game.entities.Room;
+import cz.colormemory.kdysem.game.logic.Game;
+import cz.colormemory.kdysem.game.logic.Inventory;
 
 
 
@@ -24,7 +25,7 @@ public class CommandPickUp extends ACommand
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
     
     /**Odkaz na inventář */
-    private final Inventory INVENTORY = Inventory.getInstance();
+    private final Inventory INVENTORY = Game.getInstance().getInventory();
     
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
 //== CLASS GETTERS AND SETTERS =================================================
@@ -60,7 +61,7 @@ public class CommandPickUp extends ACommand
                 
                 currentRoom.removeObjectFromRoom(touchObject);
                 
-                System.out.println(">>> DÁVÁM DO INVENTÁŘE!");
+                System.out.println(">>> PICK UP: " + touchObject.getName());
                 
                 return INVENTORY.addItem((Item) touchObject);
             }

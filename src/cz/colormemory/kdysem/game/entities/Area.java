@@ -6,7 +6,7 @@ package cz.colormemory.kdysem.game.entities;
 import cz.colormemory.json.JSONConstructor;
 import cz.colormemory.json.JSONException;
 import cz.colormemory.json.JSONObject;
-import cz.colormemory.kdysem.game.logic.RoomManager;
+import cz.colormemory.kdysem.game.logic.Game;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -162,7 +162,7 @@ public enum Area
             String current = "";
             
             if(condition && 
-                    room.equals(RoomManager.getInstance().getCurrentRoom())){
+                    room.equals(Game.getInstance().getRoomManager().getCurrentRoom())){
                 current = "@";
                 condition = false;
             }

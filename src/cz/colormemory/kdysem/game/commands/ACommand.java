@@ -4,6 +4,7 @@
 package cz.colormemory.kdysem.game.commands;
 
 import cz.colormemory.kdysem.game.entities.AGameObject;
+import cz.colormemory.kdysem.game.logic.Game;
 import cz.colormemory.kdysem.game.logic.RoomManager;
 
 
@@ -22,8 +23,11 @@ abstract class ACommand
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
 
+    /** Odkaz na jedináčka hry */
+    protected final Game GAME = Game.getInstance();
+    
     /** Odkaz na správce místností */
-    protected final RoomManager ROOM_MANAGER = RoomManager.getInstance();
+    protected final RoomManager ROOM_MANAGER;
 
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
 //== CLASS GETTERS AND SETTERS =================================================
@@ -37,6 +41,7 @@ abstract class ACommand
      */
     protected ACommand()
     {
+        this.ROOM_MANAGER = GAME.getRoomManager();
     }
 
 

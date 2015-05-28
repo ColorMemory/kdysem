@@ -4,8 +4,8 @@
 package cz.colormemory.kdysem.game.commands;
 
 import cz.colormemory.kdysem.game.entities.AGameObject;
-import cz.colormemory.kdysem.game.entities.Transporter;
 import cz.colormemory.kdysem.game.entities.Room;
+import cz.colormemory.kdysem.game.entities.Transporter;
 import java.awt.Point;
 
 
@@ -55,10 +55,10 @@ public class CommandTransport extends ACommand
     @Override
     public boolean execute(AGameObject touchObject)
     {
-        if(touchObject instanceof  Transporter){
+        if(touchObject instanceof Transporter){
             Transporter transporter = (Transporter) touchObject;
             
-            Room targetRoom = ROOM_MANAGER.getAllRooms().get(transporter.getTargetRoomId());
+            Room targetRoom = ROOM_MANAGER.getRoom(transporter.getTargetRoomId());
             Point targetPosition = transporter.getTargetPosition();
             
             // Pokud transporter nemá nastavené cílové souřadnice
@@ -69,7 +69,7 @@ public class CommandTransport extends ACommand
             ROOM_MANAGER.setCurrentRoom(targetRoom);
             ROOM_MANAGER.getCurrentRoom().setActiveTransportPosition(targetPosition);
 
-            System.out.println(">>> TRANSPORTUJI!");
+            System.out.println(">>> TRANSPORTUJI: " + targetRoom.getName());
             
             return true;
 

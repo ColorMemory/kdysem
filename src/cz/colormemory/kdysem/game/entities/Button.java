@@ -4,7 +4,6 @@
 package cz.colormemory.kdysem.game.entities;
 
 import cz.colormemory.kdysem.game.commands.CommandList;
-import cz.colormemory.kdysem.game.logic.Inventory;
 
 
 
@@ -20,10 +19,6 @@ import cz.colormemory.kdysem.game.logic.Inventory;
 public class Button extends AGameObject
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
-
-    /** Odkaz na inventář */
-    private static final Inventory INVENTORY = Inventory.getInstance();
-
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
@@ -40,7 +35,7 @@ public class Button extends AGameObject
 
     public Button(String[] description)
     {
-        super("", description, new Placement());
+        super("","", description, new Placement());
     }
 
 

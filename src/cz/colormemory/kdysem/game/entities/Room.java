@@ -3,10 +3,6 @@
  */
 package cz.colormemory.kdysem.game.entities;
 
-import cz.colormemory.kdysem.game.entities.AGameObject;
-import cz.colormemory.kdysem.game.entities.Item;
-import cz.colormemory.kdysem.game.entities.Transporter;
-import cz.colormemory.kdysem.game.entities.Person;
 import cz.colormemory.json.JSONConstructor;
 import cz.colormemory.json.JSONException;
 import cz.colormemory.json.JSONObject;

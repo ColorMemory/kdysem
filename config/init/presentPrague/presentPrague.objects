@@ -23,7 +23,12 @@
       "target": "02"
     },
     "11": {
+      "position": [
+        0,
+        0
+      ],
       "name": "Vrátný",
+      "priority": 1,
       "description": ["Dědek jeden"]
     },
     "10": {
@@ -31,11 +36,18 @@
         2,
         10
       ],
-      "name": "Kávovar",
+      "interactability": true,
+      "name": "Automat na kafe",
       "priority": 1,
-      "description": ["Kávovaru došly hrnky"],
+      "description": [
+        "Kde si myslíš že seš? Kafe zadara nám tu teda fakt nedávaj.",
+        "A jéjé voni ty kelímky fakt došly.",
+        "Teď už nemám žádné mince a bankovky to asi nevezme.",
+        "Fuj, pořád je to hnusný. No radši mu to už donesu."
+      ],
       "pickability": false,
-      "usability": false
+      "usability": false,
+      "actions": {"14": {"allowPickability": "6"}}
     }
   },
   "02": {
@@ -44,11 +56,16 @@
         2,
         12
       ],
+      "interactability": false,
       "name": "Hrnek",
       "priority": 1,
-      "description": ["Hrnek do nějš se dá udělat káva"],
+      "description": [
+        "Hrnek. K čemu by mi byl. Automat má snad kelímky ne?",
+        "Tak přecejnom se nakonec hodil."
+      ],
       "pickability": false,
-      "usability": false
+      "usability": false,
+      "actions": {}
     },
     "9": {
       "position": [
@@ -69,19 +86,24 @@
       "locked": true,
       "name": "Laboratoř",
       "priority": 2,
-      "description": ["Nejprve udělěj kafe"],
+      "description": ["Nemůžeš do laboratoře. Profesor chtěl kafe."],
       "target": "01"
     },
     "7": {
+      "position": [
+        0,
+        0
+      ],
       "name": "Profesor",
+      "priority": 1,
       "description": ["Profesor je čilý chlapík"]
     }
   },
   "01": {
     "5": {
       "position": [
-        0,
-        0
+        -10,
+        -10
       ],
       "locked": false,
       "name": "Kancelář",
@@ -91,47 +113,55 @@
     },
     "4": {
       "position": [
-        0,
-        0
+        -10,
+        -10
       ],
+      "interactability": false,
       "name": "Šifra",
       "priority": 1,
       "description": ["Velmi podstatná část hry"],
       "pickability": false,
-      "usability": false
+      "usability": false,
+      "actions": {}
     },
     "3": {
       "position": [
-        0,
-        0
+        -10,
+        -10
       ],
+      "interactability": false,
       "name": "kniha 3",
       "priority": 1,
       "description": ["Kuchařka babica"],
       "pickability": false,
-      "usability": false
+      "usability": false,
+      "actions": {}
     },
     "2": {
       "position": [
-        0,
-        0
+        -10,
+        -10
       ],
+      "interactability": false,
       "name": "kniha 2",
       "priority": 1,
       "description": ["Asi porno z dvacátejch let"],
       "pickability": false,
-      "usability": false
+      "usability": false,
+      "actions": {}
     },
     "1": {
       "position": [
-        0,
-        0
+        -10,
+        -10
       ],
+      "interactability": false,
       "name": "Kniha 1",
       "priority": 1,
-      "description": ["Něajká historická kniha"],
+      "description": ["Nějaká historická kniha"],
       "pickability": false,
-      "usability": false
+      "usability": false,
+      "actions": {}
     }
   },
   "04": {}

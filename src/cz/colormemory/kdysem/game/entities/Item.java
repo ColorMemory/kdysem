@@ -5,11 +5,16 @@ package cz.colormemory.kdysem.game.entities;
 
 import cz.colormemory.json.JSONConstructor;
 import cz.colormemory.json.JSONException;
+import cz.colormemory.kdysem.game.commands.ActionList;
 import cz.colormemory.kdysem.game.commands.CommandList;
-import cz.colormemory.kdysem.game.logic.Inventory;
 import static cz.colormemory.kdysem.game.support.IDrawable.DEFAULT_POSITION;
 import static cz.colormemory.kdysem.game.support.IDrawable.DEFAULT_PRIORITY;
 import static cz.colormemory.kdysem.game.support.IDrawable.DEFAULT_SCALE;
+import cz.colormemory.kdysem.game.support.IInteractable;
+import java.awt.Point;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 
 
@@ -20,16 +25,17 @@ import static cz.colormemory.kdysem.game.support.IDrawable.DEFAULT_SCALE;
  * @author  André HELLER
  * @version 1.00 — 02/2014
  */
-public class Item extends AGameObject
+public class Item extends AGameObject implements IInteractable
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
-
-    /** Odkaz na Inventář */
-    private final Inventory INVENTORY = Inventory.getInstance();
-
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
+    
+    /** Mapa ve které jsou ulopžené objekty se kterými je schopný objekt 
+     * interagovat a k tomu přidružená akce, která se má vykonat */
+    private final Map<String, Map<ActionList,String>> ACTIONS = new HashMap<>();
+   
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
 
     /** Zvednutelnost předmětu pro příkaz Pick Up */
@@ -37,6 +43,9 @@ public class Item extends AGameObject
     
     /** Použitelnost předmětu pro příkaz Use */
     private boolean usable;
+    
+    /** Inteakčnost předmětu pro příkaz Interact */
+    private boolean interactable;
 
 //== CLASS GETTERS AND SETTERS =================================================
 //== OTHER NON-PRIVATE CLASS METHODS ===========================================
@@ -47,13 +56,14 @@ public class Item extends AGameObject
     /***************************************************************************
      * Deafultní konstruktor. NUTNÉ PŘIDAT DALŠÍ TYPY A CELKOVĚ JE LÉPE DOMYSLET
      * 
+     * @param id
      * @param name
      * @param description
      */
-    public Item(String name, String[] description)
+    public Item(String id, String name, String[] description)
     {
-        this(name, description, new Placement(DEFAULT_PRIORITY, DEFAULT_POSITION,
-                DEFAULT_SCALE), false, false);
+        this(id, name, description, new Placement(DEFAULT_PRIORITY, DEFAULT_POSITION,
+                DEFAULT_SCALE), false, false, false);
     }
 
 
@@ -63,26 +73,65 @@ public class Item extends AGameObject
      * jako objekt {@link Placement}.
      * Zavolá rodičovský konstruktor a inicializuje přidaná data.
      *
+     * @param id
      * @param name název transportéru.
      * @param description popis transportéru
      * @param placement objet s umíštením a informacemi o vykreslení
      * @param pickable zvednutelnost
      * @param usable použitelnost
+     * @param interactable
      */
-    public Item(String name, String[] description,
-                        Placement placement, boolean pickable, boolean usable)
+    public Item(String id, String name, String[] description, Placement placement, 
+                boolean pickable, boolean usable, boolean interactable)
     {
-        super(name, description, placement);
+        super(id, name, description, placement);
         this.pickable = pickable;
         this.usable = usable;
+        this.interactable = interactable;
     }
 
 
 
 //== ABSTRACT METHODS ==========================================================
 //== INSTANCE GETTERS AND SETTERS ==============================================
+    
+    /***************************************************************************
+     * Nastaví pozici předmětu, vhodné pro přidání do invetáře
+     * 
+     * @param point nová pozice předmětu
+     */
+    public void setPosition(Point point){
+        super.getPlacement().setPosition(point);
+    }
+    
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
 
+    /***************************************************************************
+     * Vráci typ akce na základě interce
+     * @return 
+     */
+    @Override
+    public Map<ActionList,String> interact(String itemId) {
+        
+        return ACTIONS.get(itemId);
+    }
+    
+    
+    /***************************************************************************
+     * 
+     * 
+     * @param triggerItemId
+     * @param action
+     * @param targetItemId 
+     */
+    @Override
+    public void addInteractAction(String triggerItemId, ActionList action, String targetItemId) {
+        Map<ActionList,String> itemMap = new EnumMap<>(ActionList.class);
+        itemMap.put(action, targetItemId);
+        ACTIONS.put(triggerItemId, itemMap);
+    }
+    
+    
     /***************************************************************************
      * Zděděná metoda. Spouštěč herních příkazů.
      *
@@ -91,10 +140,14 @@ public class Item extends AGameObject
     @Override
     public CommandList touch()
     {
-        if(getPickability()){
+        //@todo Každý objekt bude mít asi jiné pořadí vyhodnocení, takže ještě bude nutno nějak generalizovat., ačkoliv možná nakonec, ne, interact si s tím poradí a ostanít to asi ani potřebovat nebudou
+        if(isPickable()){
             return CommandList.PICK_UP;
         }
-        else if(getUsability()){
+        else if(isInteractable()){
+            return CommandList.INTERACT;
+        }
+        else if(isUsable()){
             return CommandList.USE;
         }
         else {
@@ -135,8 +188,22 @@ public class Item extends AGameObject
                     .value(super.getPosition().x)
                     .value(super.getPosition().y)
                 .endArray()
-                .key("pickability").value(getPickability())
-                .key("usability").value(getUsability())
+                .key("pickability").value(isPickable())
+                .key("usability").value(isUsable())
+                .key("interactability").value(isInteractable())
+                .key("actions")
+                    .object();
+                    
+        for(String triggerId : ACTIONS.keySet()){
+                    json.key(triggerId)
+                            .object();
+            for(ActionList action : ACTIONS.get(triggerId).keySet()){
+                            json.key(action.getName())
+                                .value(ACTIONS.get(triggerId).get(action));
+            }
+                        json.endObject();
+        }                                
+                json.endObject()
         .endObject();
         
         return json.toString();
@@ -150,7 +217,7 @@ public class Item extends AGameObject
      *
      * @return zvednutelnost
      */
-    private boolean getPickability(){
+    public boolean isPickable(){
         return pickable;
     }
 
@@ -160,7 +227,7 @@ public class Item extends AGameObject
      *
      * @param pickable nová zvednutelnost
      */
-    private void setPickability(boolean pickable){
+    public void setPickable(boolean pickable){
         this.pickable = pickable;
     }
     
@@ -170,7 +237,7 @@ public class Item extends AGameObject
      * 
      * @return použitelnost objektu
      */
-    private boolean getUsability(){
+    public boolean isUsable(){
         return usable;
     }
     
@@ -180,8 +247,27 @@ public class Item extends AGameObject
      * 
      * @param usable boolean použitelnosti
      */
-    private void setUsability(boolean usable){
+    public void setUsability(boolean usable){
         this.usable = usable;
+    }
+    
+    
+    /**************************************************************************-
+     * Inteakčnost předmětu pro příkaz Interact
+     * 
+     * @return the inteactable
+     */
+    public boolean isInteractable() {
+        return interactable;
+    }
+
+    /**************************************************************************-
+     * Inteakčnost předmětu pro příkaz Interact
+     * 
+     * @param inteactable the inteactable to set
+     */
+    public void setInteractable(boolean interactable) {
+        this.interactable = interactable;
     }
 
 
@@ -196,5 +282,5 @@ public class Item extends AGameObject
 //        Item inst = new Item();
 //    }
 //    /** @param args Command line arguments - not used. */
-//    public static void main(String[] args)  {  test();  }
+//    public static void main(String[] args)  {  test();  }    
 }

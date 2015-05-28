@@ -1,9 +1,9 @@
 ﻿{
   "03": {
-    "items": [10],
+    "items": ["10"],
     "transporters": [
-      12,
-      13
+      "12",
+      "13"
     ],
     "name": "Hala",
     "floor": [
@@ -17,7 +17,7 @@
       150
     ],
     "description": "Hala univerzity, moc toho tu není",
-    "persons": [11],
+    "persons": ["11"],
     "playerPosition": [
       0,
       0
@@ -25,12 +25,12 @@
   },
   "01": {
     "items": [
-      1,
-      2,
-      3,
-      4
+      "1",
+      "2",
+      "3",
+      "4"
     ],
-    "transporters": [5],
+    "transporters": ["5"],
     "name": "Laboratoř",
     "floor": [
       0,
@@ -50,10 +50,10 @@
     ]
   },
   "@02": {
-    "items": [6],
+    "items": ["6"],
     "transporters": [
-      8,
-      9
+      "8",
+      "9"
     ],
     "name": "Kancelář",
     "floor": [
@@ -67,7 +67,7 @@
       150
     ],
     "description": "Kancelář profesora, zde najdete hrnek",
-    "persons": [7],
+    "persons": ["7"],
     "playerPosition": [
       0,
       0

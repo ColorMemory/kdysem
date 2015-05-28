@@ -5,7 +5,10 @@ package cz.colormemory.kdysem.game.entities;
 
 import cz.colormemory.json.JSONConstructor;
 import cz.colormemory.json.JSONException;
+import cz.colormemory.kdysem.game.commands.ActionList;
 import cz.colormemory.kdysem.game.commands.CommandList;
+import cz.colormemory.kdysem.game.support.IInteractable;
+import java.util.Map;
 
 
 
@@ -15,7 +18,7 @@ import cz.colormemory.kdysem.game.commands.CommandList;
  * @author  André HELLER
  * @version 1.00 — 02/2014
  */
-public class Person extends AGameObject
+public class Person extends AGameObject implements IInteractable
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
 //== VARIABLE CLASS ATTRIBUTES =================================================
@@ -39,9 +42,9 @@ public class Person extends AGameObject
      * @param dialog
      * @param description
      */
-    public Person(String name, String[] description, Dialog dialog)
+    public Person(String id, String name, String[] description, Dialog dialog)
     {
-        super(name, description, new Placement());
+        super(id, name, description, new Placement());
         this.DIALOG = dialog;
     }
 
@@ -51,6 +54,29 @@ public class Person extends AGameObject
 //== INSTANCE GETTERS AND SETTERS ==============================================
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
 
+    /***************************************************************************
+     * 
+     * @param object
+     * @return 
+     */
+    @Override
+    public Map<ActionList,String> interact(String itemId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+    /***************************************************************************
+     * 
+     * 
+     * @param triggerItemId
+     * @param action
+     * @param targetItemId 
+     */
+    @Override
+    public void addInteractAction(String triggerItemId, ActionList action, String targetItemId) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
     /***************************************************************************
      * Zděděná metoda. Spouštěč herních příkazů.
      *
@@ -85,11 +111,17 @@ public class Person extends AGameObject
         json.object()
                 .key("name").value(super.getName())
                 .key("description").array();
+                
 
         for(String description : super.getDescription()){
                 json.value(description);
         }
             json.endArray()
+                .key("priority").value(super.getPriority())
+                .key("position").array()
+                    .value(super.getPosition().x)
+                    .value(super.getPosition().y)
+                .endArray()
         .endObject();
         
         return json.toString();

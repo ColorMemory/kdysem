@@ -29,7 +29,7 @@ public abstract class AGameObject implements ITouchable
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
 
     /** Unikátní ID objektu */
-    private final int ID;
+    private final String ID;
 
     /** Název předmětu */
     private final String NAME;
@@ -45,8 +45,8 @@ public abstract class AGameObject implements ITouchable
     /** Použitelnost objektu - aktivní/neaktivní */
     private boolean active = true;
     
-    /** Index ukazující, který popis objektu se má aktuálně používat */
-    private int descriptionIndex = 0;
+    /** Index ukazující, který stav objektu se má aktuálně používat */
+    private int stateIndex = 0;
 
 
 //== CLASS GETTERS AND SETTERS =================================================
@@ -65,9 +65,9 @@ public abstract class AGameObject implements ITouchable
      * @param description popis objektu
      * @param placement informace o umístění, velikosti a vykreslení
      */
-    protected AGameObject(String name, String[] description, Placement placement)
+    protected AGameObject(String id, String name, String[] description, Placement placement)
     {
-        this.ID = IDManager.generate();
+        this.ID = id;
         this.NAME = name;
         this.DESCRIPTION = description;
         this.PLACEMENT = placement;
@@ -133,7 +133,7 @@ public abstract class AGameObject implements ITouchable
      *
      * @return unikátní ID
      */
-    public int getId(){
+    public String getId(){
         return ID;
     }
 
@@ -202,8 +202,8 @@ public abstract class AGameObject implements ITouchable
      * 
      * @return the descriptionIndex
      */
-    public int getDescriptionIndex() {
-        return descriptionIndex;
+    public int getStateIndex() {
+        return stateIndex;
     }
 
 
@@ -212,8 +212,8 @@ public abstract class AGameObject implements ITouchable
     /***************************************************************************
      * Index ukazující, který popis objektu se má aktuálně používat
      */
-    public void incrementDescriptionIndex() {
-        this.descriptionIndex++;
+    public void incrementStateIndex() {
+        this.stateIndex++;
     }
     
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================

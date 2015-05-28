@@ -3,12 +3,11 @@
  */
 package cz.colormemory.kdysem.game.logic;
 
-import cz.colormemory.kdysem.game.entities.Room;
-import cz.colormemory.kdysem.game.entities.Area;
 import cz.colormemory.kdysem.game.entities.AGameObject;
+import cz.colormemory.kdysem.game.entities.Area;
+import cz.colormemory.kdysem.game.entities.Room;
 import java.awt.Point;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,24 +16,22 @@ import java.util.Map;
 
 
 /*******************************************************************************
- * Třída {@code RoomManager} je jedináček představující
- * správce herních místností {@link Room}.
+ * Třída {@code RoomManager} představuje správce herních místností {@link Room}.
+ * Má k dispozici jejich kolekce vždy pro aktuální lokaci. Použíévá se pro 
+ * přístup k místnostem a hlavně jejich objektům, takže dokáže vracet objekt na 
+ * zadaných mapových souradnicích. Mimo to si pamatuje, která místnost je aktuální.
  *
  * @author  André HELLER
- * @version 1.00 — 02/2014
+ * @version 1.6 — 05/2015
  */
 public class RoomManager
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
-
-    /** Odkaz na jedináčka */
-    private static final RoomManager SINGLETON = new RoomManager();
-
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
 
-    /** Kolekce, všech herních místností */
+    /** Mapa všech herních místností */
     private final Map<String,Room> ROOM_LIST = new HashMap<>();
 
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
@@ -49,19 +46,9 @@ public class RoomManager
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
 
     /***************************************************************************
-     * Tovární metoda, vrací odkaz na jedináčka.
-     *
-     * @return  odkaz na jedináčka
-     */
-    public static RoomManager getInstance(){
-        return SINGLETON;
-    }
-
-
-    /***************************************************************************
      * Privátní konstruktor zabraňující vytvoření instancí.
      */
-    private RoomManager(){/* ... */}
+    public RoomManager(){/* ... */}
 
 
 //== ABSTRACT METHODS ==========================================================
@@ -100,7 +87,8 @@ public class RoomManager
 
 
     /***************************************************************************
-     * Vytvoří novou místnost a pridá jí do kolekce místností.
+     * Továrna, která vytvoří novou místnost a pridá jí do mapy místností a
+     * mapy lokace.
      * 
      * 
      * @param key klíč, pod kterým se mísnost uloží v hashmapě
@@ -120,11 +108,12 @@ public class RoomManager
 
 
     /***************************************************************************
-     * Vrátí objekt na zadaných souřadnicích v aktuální místnoti
+     * Vrátí herní objekt{@link AGameObject} na zadaných souřadnicích v 
+     * aktuální místnoti.
      *
-     * @param point souřadnice
+     * @param point smapové ouřadnice
      * @return object na zadaných souřadnicích nebo null.
-     * @throws NullPointerException
+     * @throws NullPointerException pokud se nenašel žádný objekt.
      */
     public AGameObject getRoomObjectOn(Point point)
     {
@@ -132,30 +121,32 @@ public class RoomManager
     }
 
 
-
     /***************************************************************************
-     * Vrátí objekt na zadaných souřadnicích. Pokud nic nenalezne vrátí null.
-     *
-     * DOPSAT !!!!  nebere v potaz jestli je otevrenej inventář nebo ne!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     * Vrátí objekt na zadaných souřadnicích.
      * 
-     * Nebere ohled na klikání na podlahu
+     * @todo FUTURE Nebere ohled na klikání na podlahu
      *
-     * @param targetRoom
-     * @param point
-     * @return
-     * @throws NullPointerException
+     * @param targetRoom cílové místnost, ze které má vrátit objekt
+     * @param point mapové souřadnice místnosti
+     * @return odkaz na herní objekt
+     * @throws NullPointerException pokud se nenašel žádný objekt,
      */
-    public AGameObject getRoomObjectOn(Room targetRoom, Point point)
+    public AGameObject getRoomObjectOn(Room targetRoom, Point point) throws NullPointerException
     {
+        // Získá kolekci objektů z místnosti a deklaruje proměnné
         Collection<AGameObject> roomObjects = targetRoom.getRoomObjects();
         AGameObject touchObject = null;
 
+        // Projede všechny objekty v mísnotsti
         for(AGameObject object : roomObjects){
+            // Přeuloží si jejich souřadnice do lokálních proměnných
             Point objectPosition = object.getPosition();
             Point objectScale = object.getScale();
 
+            // Přepočítá, zdali byl dotek v míste nějakého objektu na základě Position, Scale
             if(point.x >= objectPosition.x && point.x <= objectPosition.x + objectScale.x &&
                point.y >= objectPosition.y && point.y <= objectPosition.y + objectScale.y){
+                // Pokud už předtím nějaký objekt naše provná prioritu a uloží do proměnné
                 if(touchObject != null){
                     touchObject = touchObject.getPriority() < object.getPriority() ? object : touchObject;
                     
@@ -170,15 +161,6 @@ public class RoomManager
         return touchObject;
     }
     
-    
-    /***************************************************************************
-     * Vrátí kolekci všech místností
-     * 
-     * @return kolekce bšech místností
-     */
-    public Map<String, Room> getAllRooms(){
-        return Collections.unmodifiableMap(ROOM_LIST);
-    }
 
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
@@ -187,6 +169,7 @@ public class RoomManager
     /***************************************************************************
      * Přidá místnost do kolekce všech místností. A také do kolekce své lokace.
      *
+     * @param key Klíč nové místnosti
      * @param room nová místnost
      */
     private void addRoomToList(String key, Room room)

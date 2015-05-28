@@ -1,6 +1,6 @@
 {
   "03": {
-    "4": {
+    "13": {
       "position": [
         18,
         3
@@ -11,7 +11,7 @@
       "description": ["Vyjde ven z univerzity"],
       "target": "04"
     },
-    "3": {
+    "12": {
       "position": [
         6,
         3
@@ -22,24 +22,36 @@
       "description": ["Přesune do kanceláře"],
       "target": "02"
     },
-    "2": {
+    "11": {
+      "position": [
+        0,
+        0
+      ],
       "name": "Vrátný",
+      "priority": 1,
       "description": ["Dědek jeden"]
     },
-    "1": {
+    "10": {
       "position": [
         2,
         10
       ],
-      "name": "Kávovar",
+      "interactability": true,
+      "name": "Automat na kafe",
       "priority": 1,
-      "description": ["Kávovaru došly hrnky"],
+      "description": [
+        "Kde si myslíš že seš? Kafe zadara nám tu teda fakt nedávaj.",
+        "A jéjé voni ty kelímky fakt došly.",
+        "Teď už nemám žádné mince a bankovky to asi nevezme.",
+        "Fuj, pořád je to hnusný. No radši mu to už donesu."
+      ],
       "pickability": false,
-      "usability": false
+      "usability": false,
+      "actions": {"14": {"allowPickability": "6"}}
     }
   },
   "02": {
-    "13": {
+    "9": {
       "position": [
         18,
         3
@@ -50,7 +62,7 @@
       "description": ["Přesune do haly"],
       "target": "03"
     },
-    "12": {
+    "8": {
       "position": [
         5,
         3
@@ -58,52 +70,24 @@
       "locked": true,
       "name": "Laboratoř",
       "priority": 2,
-      "description": ["Nejprve udělěj kafe"],
+      "description": ["Nemůžeš do laboratoře. Profesor chtěl kafe."],
       "target": "01"
     },
-    "11": {
-      "name": "Profesor",
-      "description": ["Profesor je čilý chlapík"]
-    },
-    "10": {
+    "7": {
       "position": [
-        2,
-        12
+        0,
+        0
       ],
-      "name": "Hrnek",
+      "name": "Profesor",
       "priority": 1,
-      "description": ["Hrnek do nějš se dá udělat káva"],
-      "pickability": false,
-      "usability": false
+      "description": ["Profesor je čilý chlapík"]
     }
   },
   "01": {
-    "6": {
-      "position": [
-        0,
-        0
-      ],
-      "name": "kniha 2",
-      "priority": 1,
-      "description": ["Asi porno z dvacátejch let"],
-      "pickability": false,
-      "usability": false
-    },
     "5": {
       "position": [
-        0,
-        0
-      ],
-      "name": "Kniha 1",
-      "priority": 1,
-      "description": ["Něajká historická kniha"],
-      "pickability": false,
-      "usability": false
-    },
-    "9": {
-      "position": [
-        0,
-        0
+        -10,
+        -10
       ],
       "locked": false,
       "name": "Kancelář",
@@ -111,27 +95,57 @@
       "description": ["Přejde do kanceláíře"],
       "target": "02"
     },
-    "8": {
+    "4": {
       "position": [
-        0,
-        0
+        -10,
+        -10
       ],
+      "interactability": false,
       "name": "Šifra",
       "priority": 1,
       "description": ["Velmi podstatná část hry"],
       "pickability": false,
-      "usability": false
+      "usability": false,
+      "actions": {}
     },
-    "7": {
+    "3": {
       "position": [
-        0,
-        0
+        -10,
+        -10
       ],
+      "interactability": false,
       "name": "kniha 3",
       "priority": 1,
       "description": ["Kuchařka babica"],
       "pickability": false,
-      "usability": false
+      "usability": false,
+      "actions": {}
+    },
+    "2": {
+      "position": [
+        -10,
+        -10
+      ],
+      "interactability": false,
+      "name": "kniha 2",
+      "priority": 1,
+      "description": ["Asi porno z dvacátejch let"],
+      "pickability": false,
+      "usability": false,
+      "actions": {}
+    },
+    "1": {
+      "position": [
+        -10,
+        -10
+      ],
+      "interactability": false,
+      "name": "Kniha 1",
+      "priority": 1,
+      "description": ["Nějaká historická kniha"],
+      "pickability": false,
+      "usability": false,
+      "actions": {}
     }
   },
   "04": {}

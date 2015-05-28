@@ -5,8 +5,7 @@ package cz.colormemory.kdysem.game.logic;
 
 import cz.colormemory.kdysem.framework.IBroadcaster;
 import cz.colormemory.kdysem.framework.IListener;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 
 
@@ -17,7 +16,7 @@ import java.util.List;
  * ke kterým se přihlašují skupiny posluchačů.
  *
  * @author  André HELLER
- * @version 1.00 — 02/2014
+ * @version 1.1 — 02/2014
  */
 public class Broadcaster implements IBroadcaster
 {
@@ -26,8 +25,8 @@ public class Broadcaster implements IBroadcaster
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
 
-    /** Kolekce posluchačů */
-    private final List<IListener> LISTENERS = new ArrayList<>();
+    /** Množina posluchačů */
+    private final HashSet<IListener> LISTENERS = new HashSet<>();
 
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
 //== CLASS GETTERS AND SETTERS =================================================
@@ -47,7 +46,7 @@ public class Broadcaster implements IBroadcaster
 //== INSTANCE GETTERS AND SETTERS ==============================================
 
     /***************************************************************************
-     * Přidá posluchače do kolekce.
+     * Přidá posluchače do množiny.
      *
      * @param listener posluchač, který se má přidat.
      */
@@ -59,7 +58,7 @@ public class Broadcaster implements IBroadcaster
 
 
     /***************************************************************************
-     * Odebere posluchače z kolekce.
+     * Odebere posluchače z množiny.
      *
      * @param listener posluchač, který má být odebrán.
      */

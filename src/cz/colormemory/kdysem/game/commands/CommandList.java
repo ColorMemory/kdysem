@@ -53,7 +53,7 @@ public enum CommandList
     /** Příkaz INTERCTION - příkaz nějakým způsobem interaguje věci
      * vybrané v inventáři nebo v mísnosti v závoslosti na jiné věci.
      * Př. Nožem uříznu lano. */
-    INTERACTION(new CommandInteraction());
+    INTERACT(new CommandInteract());
 
 
 //== CONSTANT CLASS ATTRIBUTES =================================================

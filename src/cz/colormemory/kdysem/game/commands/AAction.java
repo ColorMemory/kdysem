@@ -1,19 +1,22 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
 package cz.colormemory.kdysem.game.commands;
 
-import cz.colormemory.kdysem.game.entities.AGameObject;
-
-
-
 /*******************************************************************************
- * Instances of class {@code CommandDescribe} represent ...
- *
- * @author  André HELLER
- * @version 1.00 — 02/2014
+ * Instance of class {@code AAction} represents 
+ * 
+ * @author Avatar
+ * @version 1.00 - 05/15
  */
-public class CommandDescribe extends ACommand
+public abstract class AAction
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
 //== VARIABLE CLASS ATTRIBUTES =================================================
@@ -26,31 +29,31 @@ public class CommandDescribe extends ACommand
 //##############################################################################
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
 
-    /***************************************************************************
-     *
-     */
-    public CommandDescribe()
-    {
-    }
 
+    /***************************************************************************
+     * Implicitní konstruktor
+     */
+    protected AAction(){
+    }
 
 
 //== ABSTRACT METHODS ==========================================================
+    
+    /***************************************************************************
+     * Vykoná zadanou akci
+     */
+    public abstract void execute(String gameObjectId);
+    
+    
+    /***************************************************************************
+     * Vrátí nízev akce
+     * 
+     * @return jméno akce
+     */
+    public abstract String getName();
+    
 //== INSTANCE GETTERS AND SETTERS ==============================================
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
-
-    /***************************************************************************
-     *
-     * @param touchObject
-     * @return
-     */
-    @Override
-    public boolean execute(AGameObject touchObject)
-    {       
-        System.out.println(">>> DESCRIBE: " + touchObject.getName() + "\n> " + touchObject.getDescription()[touchObject.getStateIndex()]);
-        return true;
-    }
-
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
 //== PRIVATE AND AUXILIARY INSTANCE METHODS ====================================
 //== EMBEDDED TYPES AND INNER CLASSES ==========================================
@@ -61,8 +64,12 @@ public class CommandDescribe extends ACommand
 //     */
 //    public static void test()
 //    {
-//        CommandDescribe inst = new CommandDescribe();
+//        AAction inst = new AAction();
 //    }
 //    /** @param args Command line arguments - not used. */
 //    public static void main(String[] args)  {  test();  }
 }
+
+
+
+

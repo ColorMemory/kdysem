@@ -55,9 +55,9 @@ public class Transporter extends AGameObject
      * @param description popis transportéru
      * @param targetRoom cílová místnost transportéru
      */
-    public Transporter(String name, String[] description, String targetRoom)
+    public Transporter(String id, String name, String[] description, String targetRoom)
     {
-        this(name, description, new Placement(DEFAULT_PRIORITY, DEFAULT_POSITION,
+        this(id, name, description, new Placement(DEFAULT_PRIORITY, DEFAULT_POSITION,
                 DEFAULT_SCALE), targetRoom, NULL_TARGET_POSITION, false);
     }
     
@@ -71,9 +71,9 @@ public class Transporter extends AGameObject
      * @param targetRoom cílová místnost transportéru
      * @param locked stav uzamčení transportéru, pookud je zamknutý, neumožnuje přenášet
      */
-    public Transporter(String name, String[] description, String targetRoom, boolean locked)
+    public Transporter(String id, String name, String[] description, String targetRoom, boolean locked)
     {
-        this(name, description, new Placement(DEFAULT_PRIORITY, DEFAULT_POSITION,
+        this(id, name, description, new Placement(DEFAULT_PRIORITY, DEFAULT_POSITION,
                 DEFAULT_SCALE), targetRoom, NULL_TARGET_POSITION, locked);
     }
     
@@ -90,10 +90,10 @@ public class Transporter extends AGameObject
      * @param targetRoomId cílová místnost
      * @param locked stav uzamčení transportéru, pookud je zamknutý, neumožnuje přenášet
      */
-    public Transporter(String name, String[] description,
+    public Transporter(String id, String name, String[] description,
                         Placement placement, String targetRoomId, boolean locked)
     {
-        this(name, description, placement, targetRoomId, NULL_TARGET_POSITION, locked);
+        this(id, name, description, placement, targetRoomId, NULL_TARGET_POSITION, locked);
     }
     
     
@@ -110,11 +110,11 @@ public class Transporter extends AGameObject
      * @param targetPosition cílové souřednice v cílové místnosti
      * @param locked stav uzamčení transportéru, pookud je zamknutý, neumožnuje přenášet
      */
-    public Transporter(String name, String[] description,
+    public Transporter(String id, String name, String[] description,
                         Placement placement, String targetRoomId,
                         Point targetPosition, boolean locked)
     {
-        super(name, description, placement);
+        super(id, name, description, placement);
         this.targetRoomId = targetRoomId;
         this.targetPosition = targetPosition;
         this.locked = locked;
