@@ -7,6 +7,7 @@ import cz.colormemory.json.JSONConstructor;
 import cz.colormemory.json.JSONException;
 import cz.colormemory.kdysem.game.commands.ActionList;
 import cz.colormemory.kdysem.game.commands.CommandList;
+import cz.colormemory.kdysem.game.exceptions.GameControlException;
 import static cz.colormemory.kdysem.game.support.IDrawable.DEFAULT_POSITION;
 import static cz.colormemory.kdysem.game.support.IDrawable.DEFAULT_PRIORITY;
 import static cz.colormemory.kdysem.game.support.IDrawable.DEFAULT_SCALE;
@@ -125,9 +126,9 @@ public class Item extends AGameObject implements IInteractable
      * @param targetItemId 
      */
     @Override
-    public void addInteractAction(String triggerItemId, ActionList action, String targetItemId) {
+    public void addInteractAction(String triggerItemId, String actionName, String targetItemId) throws GameControlException {
         Map<ActionList,String> itemMap = new EnumMap<>(ActionList.class);
-        itemMap.put(action, targetItemId);
+        itemMap.put(ActionList.getAction(actionName), targetItemId);
         ACTIONS.put(triggerItemId, itemMap);
     }
     
@@ -266,7 +267,8 @@ public class Item extends AGameObject implements IInteractable
      * 
      * @param inteactable the inteactable to set
      */
-    public void setInteractable(boolean interactable) {
+    @Override
+    public void setInteractivity(boolean interactable) {
         this.interactable = interactable;
     }
 

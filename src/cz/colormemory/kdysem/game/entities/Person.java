@@ -7,6 +7,7 @@ import cz.colormemory.json.JSONConstructor;
 import cz.colormemory.json.JSONException;
 import cz.colormemory.kdysem.game.commands.ActionList;
 import cz.colormemory.kdysem.game.commands.CommandList;
+import cz.colormemory.kdysem.game.exceptions.GameControlException;
 import cz.colormemory.kdysem.game.support.IInteractable;
 import java.util.Map;
 
@@ -65,16 +66,14 @@ public class Person extends AGameObject implements IInteractable
     }
     
     
-    /***************************************************************************
-     * 
-     * 
-     * @param triggerItemId
-     * @param action
-     * @param targetItemId 
-     */
     @Override
-    public void addInteractAction(String triggerItemId, ActionList action, String targetItemId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void setInteractivity(boolean interactable) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addInteractAction(String triggerItemId, String actionName, String targetItemId) throws GameControlException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     /***************************************************************************

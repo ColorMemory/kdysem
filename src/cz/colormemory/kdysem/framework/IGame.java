@@ -37,8 +37,9 @@ public interface IGame extends IBroadcaster
     /***************************************************************************
      * Uloží aktuální stav hry.
      * 
+     * @return 
      */
-    public void save();
+    public boolean save();
 
 
     /***************************************************************************

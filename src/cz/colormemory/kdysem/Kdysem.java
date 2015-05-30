@@ -4,6 +4,7 @@
 package cz.colormemory.kdysem;
 
 import cz.colormemory.kdysem.game.logic.Game;
+import cz.colormemory.kdysem.game.support.Logger;
 import java.awt.Point;
 
 
@@ -29,12 +30,14 @@ public class Kdysem
     public static void main(String[] args)
     {
         //Spustí logger, který vypisuje stav hry do konzole
-//        Logger.getInstance();
+        Logger.getInstance();
 
         // Vytvoří hru a inicializuje ji
         Game game = Game.getInstance();
         game.initialize();
                     
+        
+        
         //Simuluje dotek uživatele
         game.processTouch(new Point(5,3)); // Přesun do laboratoře - zamčeno! --> DESCRIBE
         game.processTouch(new Point(2,12)); // Sebrání hrnku - ještě nezkusil kávovar --> DESCRIBE
@@ -43,13 +46,24 @@ public class Kdysem
         
         game.openInventory(); //Dočasná pomocná metoda, "otevře inventář"
         
-        game.processTouch(new Point(5, 0)); // Vybrání mince v inventáři
+        game.processTouch(new Point(5,0)); // Vybrání mince v inventáři
         
         game.closeInventory(); // "zavře inventář"
         
-        game.processTouch(new Point(2, 10)); // Opětovní klinutí na kávor tentokrát již s mincí; --> INTERACT
-        game.processTouch(new Point(6, 3)); // Zpět do kanceláře --> TRANSPORT
-        game.processTouch(new Point(2, 12)); //Sebrání hnrku, tentokrát by mělo jít. --> PICKUP
+        game.processTouch(new Point(2,10)); // Opětovní klinutí na kávor tentokrát již s mincí; --> INTERACT
+        game.processTouch(new Point(6,3)); // Zpět do kanceláře --> TRANSPORT
+        game.processTouch(new Point(2,12)); //Sebrání hnrku, tentokrát by mělo jít. --> PICKUP
+        game.processTouch(new Point(18,3)); // Přesun do haly - mělo by fungovat. --> TRANSPORT
+        
+        game.openInventory(); //Dočasná pomocná metoda, "otevře inventář"
+        
+        game.processTouch(new Point(10,0)); // Vybrání bankovek v inventáři
+        
+        game.closeInventory(); // "zavře inventář"
+        
+        game.processTouch(new Point(2,10)); // Opětovní klinutí na kávor tentokrát již s mincí; --> INTERACT
+        
+        
         
         game.save(); // Uloží aktuální stav hry do souborů
         

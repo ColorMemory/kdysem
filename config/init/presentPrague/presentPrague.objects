@@ -1,4 +1,4 @@
-﻿{
+{
   "03": {
     "13": {
       "position": [
@@ -47,7 +47,14 @@
       ],
       "pickability": false,
       "usability": false,
-      "actions": {"14": {"allowPickability": "6"}}
+      "actions": {
+        "14": {
+          "allowPickability": "6"
+        },
+        "6": {
+          "allowInteractivity": "15"
+        }
+      }
     }
   },
   "02": {
@@ -65,7 +72,9 @@
       ],
       "pickability": false,
       "usability": false,
-      "actions": {}
+      "actions": {
+      
+      }
     },
     "9": {
       "position": [

@@ -110,14 +110,14 @@ public class Inventory
      * @param active the active to set
      */
     public void setActive(boolean active) {
-        System.out.println(">>> TOGGLE INVENTORY\n===========================================================");
         this.active = active;
     }
 
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
 
     /***************************************************************************
-     * Přidá Item do kolekce inventáře. Vrátí uspěšnost.
+     * Přidá Item do seznamu inventáře. Pokud se do něj na základě maximální
+     * kapacity ještě vejde. Vrátí uspěšnost.
      *
      * @param item item, který se přidá do kolekce.
      * @return úspěšnost vložení do kolekce.
@@ -130,12 +130,11 @@ public class Inventory
         else {
             return false;
         }
-        
     }
 
 
     /***************************************************************************
-     * Odebere z kolekce inventáře item.
+     * Odebere ze seznamu inventáře item.
      *
      * @param item item, který se odebere z kolekce.
      * @return úspěšnost odebrání z kolekce.
@@ -147,22 +146,27 @@ public class Inventory
 
 
     /***************************************************************************
-     * Přidá do kolekce vybraných věcí
+     * Vybere předmět z inventáře a ten si uloží jako dočasně vybraný
      *
      * @param index
      * @return vybraný item
      */
     public Item selectItem(int index)
     {
-        selectedItem = ITEM_LIST.get(index);
-        System.out.println(">>> SELECT: " + selectedItem.getName() + "\n===========================================================");
-        return selectedItem;
+        if(selectedItem == null){
+            selectedItem = ITEM_LIST.get(index);
+            System.out.println(">>> SELECT: " + selectedItem.getName() + "\n===========================================================");
+            return selectedItem;
+        }
+        else{
+            System.out.println("Předmět už je vybraný");
+            return null;
+        }
     }
 
 
     /***************************************************************************
-     * Odebre z kolekce vybraných věcí
-     *
+     * Vyčistí dočasný výber inventáře.
      */
     public void unselectItem()
     {

@@ -3,6 +3,8 @@
  */
 package cz.colormemory.kdysem.game.commands;
 
+import cz.colormemory.kdysem.game.exceptions.GameControlException;
+
 
 
 
@@ -22,7 +24,8 @@ public enum ActionList
 {
 //== VALUES OF THE ENUMERATION TYPE ============================================
     
-    ALLOW_PICKUPABILITY(new ActionAllowPickability());
+    ALLOW_PICKUPABILITY(new ActionAllowPickability()),
+    ALLOW_INTERACTivity(new ActionAllowInteractivity());
 
 //== CONSTANT CLASS ATTRIBUTES =================================================
     
@@ -40,13 +43,13 @@ public enum ActionList
      * @param name
      * @return 
      */
-    public static ActionList getAction(String name){
+    public static ActionList getAction(String name) throws GameControlException{
         for(ActionList action : ActionList.values()){
             if(action.getName().equals(name)){
                 return action;
             }
         }
-        return null;
+        throw new GameControlException("Uvedená akce nebyla nalezena");
     }
     
 //== OTHER NON-PRIVATE CLASS METHODS ===========================================

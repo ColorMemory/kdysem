@@ -33,9 +33,6 @@ public class Executor
 
     /** Odkaz na správce mísností */
     private final RoomManager ROOM_MANAGER = GAME.getRoomManager();
-    
-    /** Odkaz na správce stavů */
-    private final StateManager STATE_MANAGER = GAME.getStateManager();
 
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
 //== CLASS GETTERS AND SETTERS =================================================
@@ -146,7 +143,7 @@ public class Executor
     private Point calculateRoomShift(Point point){
 
         // Získá displayový posun
-        int roomShift = STATE_MANAGER.getRoomShift();
+        int roomShift = Integer.parseInt(GAME.getProperty("roomShift"));
 
         point.x = point.x + roomShift;
 

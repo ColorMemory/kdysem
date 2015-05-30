@@ -47,10 +47,10 @@ public class HardConstructor
         RoomManager rm = Game.getInstance().getRoomManager();
         GameObjectManager gom = Game.getInstance().getGameObjectManager();
         
-        Room laborator = rm.createRoom("01", "Laboratoř", "Laboratoř, kde naleznete šifru", Area.PRESENT_PRAGUE, new Point(0, 0));
-        Room kancelar = rm.createRoom("02","Kancelář","Kancelář profesora, zde najdete hrnek", Area.PRESENT_PRAGUE, new Point(0, 0));
-        Room hala = rm.createRoom("03", "Hala", "Hala univerzity, moc toho tu není", Area.PRESENT_PRAGUE, new Point(0, 0));
-        Room predUniverzitou = rm.createRoom("04", "Před univerzitou", "velké prsotorné nádvoří", Area.PRESENT_PRAGUE, new Point(0, 0));
+        Room laborator = rm.createRoom("01", "Laboratoř", "Laboratoř, kde naleznete šifru", Area.presentPrague, new Point(0, 0));
+        Room kancelar = rm.createRoom("02","Kancelář","Kancelář profesora, zde najdete hrnek", Area.presentPrague, new Point(0, 0));
+        Room hala = rm.createRoom("03", "Hala", "Hala univerzity, moc toho tu není", Area.presentPrague, new Point(0, 0));
+        Room predUniverzitou = rm.createRoom("04", "Před univerzitou", "velké prsotorné nádvoří", Area.presentPrague, new Point(0, 0));
         
         
         String[] kniha1 = new String[1];
@@ -68,11 +68,11 @@ public class HardConstructor
         String[] kancelarT = new String[1];
         kancelarT[0] = "Přejde do kanceláíře";
         
-        laborator.addObjectToRoom(gom.createItem(IDManager.generate(), "Kniha 1", kniha1, new Placement(1, new Point(-10, -10)), false, false, false));
-        laborator.addObjectToRoom(gom.createItem(IDManager.generate(), "kniha 2", kniha2, new Placement(1, new Point(-10, -10)), false, false, false));
-        laborator.addObjectToRoom(gom.createItem(IDManager.generate(), "kniha 3", kniha3, new Placement(1, new Point(-10, -10)), false, false, false));
-        laborator.addObjectToRoom(gom.createItem(IDManager.generate(), "Šifra",sifra, new Placement(1, new Point(-10, -10)), false, false, false));
-        laborator.addObjectToRoom(gom.createTransporter(IDManager.generate(), "Kancelář", kancelarT,new Placement(1, new Point(-10, -10)), "02", false));
+        laborator.addObjectToRoom(gom.createGameObjectItem(IDManager.generate(), "Kniha 1", kniha1, new Placement(1, new Point(-10, -10)), false, false, false));
+        laborator.addObjectToRoom(gom.createGameObjectItem(IDManager.generate(), "kniha 2", kniha2, new Placement(1, new Point(-10, -10)), false, false, false));
+        laborator.addObjectToRoom(gom.createGameObjectItem(IDManager.generate(), "kniha 3", kniha3, new Placement(1, new Point(-10, -10)), false, false, false));
+        laborator.addObjectToRoom(gom.createGameObjectItem(IDManager.generate(), "Šifra",sifra, new Placement(1, new Point(-10, -10)), false, false, false));
+        laborator.addObjectToRoom(gom.createGameObjectTransporter(IDManager.generate(), "Kancelář", kancelarT,new Placement(1, new Point(-10, -10)), "02", false));
         
         
         String[] hrnek = new String[2];
@@ -142,7 +142,7 @@ public class HardConstructor
         //inicializace akcí
         automatNaKafe.addInteractAction(minceI.getId(), ActionList.ALLOW_PICKUPABILITY, hrnekI.getId());
         
-        Area.setActualArea(Area.PRESENT_PRAGUE);
+        Area.setActualArea(Area.presentPrague);
         Game.getInstance().getRoomManager().setCurrentRoom(kancelar);
     }
 

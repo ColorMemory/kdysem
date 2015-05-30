@@ -71,6 +71,53 @@ public class GameObjectManager
     
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
     
+    public AGameObject createObject(String type, String key, String name, String[] description, int priority, Point position,
+                           Object ... params){
+        //@todo Tady to přetypování mi přijde divné, ještě někdy ověřit
+        
+        AGameObject gameObject;
+        
+        switch(type){
+            case "item" :
+                boolean pickability = (boolean) params[0],
+                        useability = (boolean) params[1],
+                        interactability = (boolean) params[2];
+                
+                gameObject = this.createItem(
+                        key, name, description, new Placement(priority, position), 
+                        pickability, 
+                        useability, 
+                        interactability
+                );
+                break;
+                
+            case "transporter" :
+                String targetRoom = (String) params[0];
+                boolean locked = (boolean) params[1];
+                
+                gameObject = this.createTransporter(
+                        key, name, description, new Placement(priority, position), 
+                        targetRoom, 
+                        locked
+                );
+                break;
+                
+            case "person" :
+                Dialog dialog = (Dialog) params[0];
+                
+                gameObject = this.createPerson(
+                        key, name, description, new Placement(priority, position), 
+                        dialog
+                );
+                break;
+            
+            default:
+                throw new IllegalArgumentException("Tento typ objektu neexistuje.");
+        }
+        
+        return gameObject;
+    }
+    
     /***************************************************************************
      * Tovární metoda. Vytvoří {@link Item} a přidá ho do mapy objektů.
      * 
@@ -83,7 +130,7 @@ public class GameObjectManager
      * @param interactability Interakčnost
      * @return vytvořený Item
      */
-    public Item createItem(String key, String name, String[] description, Placement placement,
+    private Item createItem(String key, String name, String[] description, Placement placement,
                            boolean pickability, boolean usability, boolean interactability){
         Item item = new Item(key, name, description, placement, pickability, usability, interactability);
         addGameObject(item);
@@ -103,7 +150,7 @@ public class GameObjectManager
      * @param locked para,etr uzamčení
      * @return vytvořený Transporter
      */
-    public Transporter createTransporter(String key, String name, String[] description, Placement placement,
+    private Transporter createTransporter(String key, String name, String[] description, Placement placement,
                            String targetRoom, boolean locked){
         Transporter transporter = new Transporter(key, name, description, placement, targetRoom, new Point(-1,-1), locked);
         addGameObject(transporter);
@@ -122,7 +169,7 @@ public class GameObjectManager
      * @param dialog dislog osoby
      * @return vytvořenou osobu
      */
-    public Person createPerson(String key, String name, String[] description, Placement placement, Dialog dialog){
+    private Person createPerson(String key, String name, String[] description, Placement placement, Dialog dialog){
         Person person = new Person(key, name, description, dialog);
         addGameObject(person);
         

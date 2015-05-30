@@ -1,28 +1,25 @@
 /* The file is saved in UTF-8 codepage.
  * Check: «Stereotype», Section mark-§, Copyright-©, Alpha-α, Beta-β, Smile-☺
  */
-package cz.colormemory.kdysem.game.commands;
-
-import cz.colormemory.kdysem.game.entities.AGameObject;
-import cz.colormemory.kdysem.game.entities.Item;
-import cz.colormemory.kdysem.game.support.IInteractable;
-import java.util.Map;
-
-
+package cz.colormemory.kdysem.game.exceptions;
 
 /*******************************************************************************
- * Instances of class {@code CommandInteract} represent ...
  *
- * @author  André HELLER
- * @version 1.00 — 02/2014
+ * @author Avatar
  */
-public class CommandInteract extends ACommand
-{
+public class GameSaveException extends Exception{
 //== CONSTANT CLASS ATTRIBUTES =================================================
+    
+    /** serial Version UID */
+    private static final long serialVersionUID = 135365476863L;
+    
 //== VARIABLE CLASS ATTRIBUTES =================================================
 //== STATIC INITIALIZER (CLASS CONSTRUCTOR) ====================================
 //== CONSTANT INSTANCE ATTRIBUTES ==============================================
 //== VARIABLE INSTANCE ATTRIBUTES ==============================================
+    
+    private Exception previous;
+    
 //== CLASS GETTERS AND SETTERS =================================================
 //== OTHER NON-PRIVATE CLASS METHODS ===========================================
 
@@ -30,54 +27,35 @@ public class CommandInteract extends ACommand
 //== CONSTUCTORS AND FACTORY METHODS ===========================================
 
     /***************************************************************************
-     *
+     * Implicitní konstruktor
+     * @param message
      */
-    public CommandInteract()
-    {
+    public GameSaveException(String message){
+        super(message);
     }
-
+    
+    public GameSaveException(String message, Exception previous){
+        super(message);
+        this.previous = previous;
+    }
 
 
 //== ABSTRACT METHODS ==========================================================
 //== INSTANCE GETTERS AND SETTERS ==============================================
 //== OTHER NON-PRIVATE INSTANCE METHODS ========================================
-
+    
     /***************************************************************************
-     *
-     * @param touchObject
-     * @return
+     * 
      */
     @Override
-    public boolean execute(AGameObject touchObject)
-    {
-        Item selectedItem = GAME.getInventory().getSelectedItem();
-        if(selectedItem != null && touchObject instanceof IInteractable){
-            IInteractable interactObject = (IInteractable) touchObject;
-            
-            Map<ActionList,String> actions = interactObject.interact(selectedItem.getId());
-            
-            if(actions == null){
-                throw new UnsupportedOperationException("Not supported yet");
-            }
-            
-            //Vykoná akce
-            for(ActionList action : actions.keySet()){
-                action.execute(actions.get(action));
-            }
-            
-            
-            System.out.println(">>> INTERACT: " + touchObject.getName());
-            
-            //inkrementuje stav objektu
-            touchObject.incrementStateIndex();
-            interactObject.setInteractivity(false);
-            
-            GAME.getInventory().unselectItem();
+    public void printStackTrace() {
+        super.printStackTrace(); 
+        
+        if(previous != null){
+            previous.printStackTrace();
         }
-        //Po vykonání zavolá příkaz describe
-        return CommandList.DESCRIBE.execute(touchObject);
     }
-
+    
 //== PRIVATE AND AUXILIARY CLASS METHODS =======================================
 //== PRIVATE AND AUXILIARY INSTANCE METHODS ====================================
 //== EMBEDDED TYPES AND INNER CLASSES ==========================================
@@ -88,7 +66,7 @@ public class CommandInteract extends ACommand
 //     */
 //    public static void test()
 //    {
-//        CommandInteract inst = new CommandInteract();
+//        Broadcaster inst = new Broadcaster();
 //    }
 //    /** @param args Command line arguments - not used. */
 //    public static void main(String[] args)  {  test();  }

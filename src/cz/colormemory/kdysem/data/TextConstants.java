@@ -17,20 +17,33 @@ package cz.colormemory.kdysem.data;
  * @author André Heller
  * @version 1.00 - 05/15
  */
-public class TextConstants
+public final class TextConstants
 {
 //== CONSTANT CLASS ATTRIBUTES =================================================
     
     /** Serializační vyjímky */
     public static final String
-        CONF_FILE_NOT_FOUND = "Nebyl nalezen konfigurační soubor.\n",
-        CONF_FILE_WRONG_SYNTAX = "Konfigurační soubor je v nesprávném tvaru.\n",
-        CONF_FILE_IO_ERROR = "Konfigurační soubor se nepodařilo přečíst.\n",
-        AREA_DOES_NOT_EXIST = "Inicializovaná lokace \"%s\" pravděpodobně není součástí seznamu lokací.\n.",
+        FILE_NOT_FOUND = "Soubor %s nebyl nalezen.\n",
+        FILE_IO_ERROR = "Soubor %s se nepodařilo přečíst\n",
+        FILE_JSON_PARSE_ERROR = "Soubor %s se nepovedlo přeparsovat na JSON.\n",
+        
+        CONFIG_CREATING_SYNTAX_ERROR = "Při vytváření konfigurace se někde posral JSON.\n",
+        
+        AREA_CANT_CREATE = "Nepodařilo se vytvořit lokaci: %s\n",
+        ROOM_CANT_CREATE = "Nepodařilo se vytvořit místnost: %s\n",
+        GAMEOBJECT_CANT_ADD = "Do místnosti %s se nepodařilo přidat objekt %s\n",
+        INSTANCES_CREATING_SYNTAX_ERROR = "Při vytváření instancí mísností a herních objektů se někde posral JSON.\n",
+            
+        ACTIONS_CREATING_SYNTAX_ERROR = "Při vytváření závislostních akcí objektů se někde posral JSON.\n",
+        ACTIONS_DOES_NOT_EXIST = "Při vytváření akci došlo k chybě. Jedna z definovaných akcí neexistuje.\n",
+            
+            
+            
+        AREA_DOES_NOT_EXIST = "Inicializovaná lokace \"%s\" neexistuje.\n.",
         AREA_FILE_IO_ERROR = "Soubory lokace \"%s\" se nepodařilo přečíst.\n",
         AREA_FILE_WRONG_SYNTAX = "Soubory lokace \"%s\" jsou v nesprávném tvaru.\n",
         AREA_JSON_IS_NULL = "Soubory lokace se špatně přečetli a nedokázali vytvořit instanci JSONObjectu tak, že to neochytila ani IO ani JSON vyjímka.\n KOMU SE TOHLE ZOBRAZÍ MÁ U MĚ PIVO. StackTrace a okolnosti prosím zapsat!!\n",
-        INSTANCES_CREATING_SYNTAX_ERROR = "Při vytváření instancí mísností a herních objektů se někde posral JSON.\n",
+        
         SAVE_FILE_CREATE_ERROR = "Hra se nepodařila uložit do sobouru.\n",
         SAVE_FILE_WRONG_SYNTAX = "Hra generuje nevalidní JSON, nejde tedy uložit.\n";
         

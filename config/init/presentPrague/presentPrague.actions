@@ -1,0 +1,10 @@
+{
+  "10": {
+    "14": {
+      "allowPickability": "6"
+    },
+    "6": {
+      "allowInteractivity": "15"
+    } 
+  }
+}

@@ -9,6 +9,8 @@ import cz.colormemory.json.JSONObject;
 import cz.colormemory.kdysem.game.logic.Game;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 
 
@@ -29,7 +31,7 @@ import java.util.Collection;
 public enum Area
 {
 //== VALUES OF THE ENUMERATION TYPE ============================================
-  PRESENT_PRAGUE("presentPrague",""),
+  presentPrague("presentPrague",""),
   PRESENT_DAVLE("",""),
   BETWEEN_YEARS("",""),
   PAST_PRAGUE("",""),
@@ -39,6 +41,10 @@ public enum Area
 
 
 //== CONSTANT CLASS ATTRIBUTES =================================================
+  
+    /** Mapa všech lokací */
+    private static final Map<String, Area> AREAS = new HashMap<>();
+    
 //== VARIABLE CLASS ATTRIBUTES =================================================
   
     /** Actuální lokace */
@@ -73,9 +79,14 @@ public enum Area
      * Nastaví aktuální lokaci
      * 
      * @param area odkaz na lokaci
+     * @return 
      */
-    public static void setActualArea(Area area){
-        actualArea = area;
+    public static boolean setActualArea(Area area){
+        if(area != null){
+            actualArea = area;
+            return true;
+        }
+        return false;
     }
     
 //== OTHER NON-PRIVATE CLASS METHODS ===========================================

@@ -4,6 +4,7 @@
 package cz.colormemory.kdysem.game.support;
 
 import cz.colormemory.kdysem.game.commands.ActionList;
+import cz.colormemory.kdysem.game.exceptions.GameControlException;
 import java.util.Map;
 
 
@@ -33,7 +34,10 @@ public interface IInteractable
      * @param action
      * @param targetItemId 
      */
-    public abstract void addInteractAction(String triggerItemId, ActionList action, String targetItemId);
+    public abstract void addInteractAction(String triggerItemId, String actionName, String targetItemId) throws GameControlException;
+    
+    
+    public abstract void setInteractivity(boolean interactable);
 
 //== INHERITED GETTERS AND SETTERS =============================================
 //== REMAINING DECLARED METHODS ================================================

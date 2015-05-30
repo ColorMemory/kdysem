@@ -36,7 +36,7 @@
         2,
         10
       ],
-      "interactability": true,
+      "interactability": false,
       "name": "Automat na kafe",
       "priority": 1,
       "description": [
@@ -47,7 +47,10 @@
       ],
       "pickability": false,
       "usability": false,
-      "actions": {"14": {"allowPickability": "6"}}
+      "actions": {
+        "6": {"allowInteractivity": "15"},
+        "14": {"allowPickability": "6"}
+      }
     }
   },
   "02": {
