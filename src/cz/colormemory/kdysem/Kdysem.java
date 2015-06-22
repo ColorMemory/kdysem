@@ -36,7 +36,7 @@ public class Kdysem
         Game game = Game.getInstance();
         game.initialize();
                     
-        
+        /* @todo - jak postava chodí, tak je nutné aby při přecházení dopředu a dozadu jakoby přecházela mezi vrstavami, abycho docíli efektu překrytí předmětů v prostředních vrstvách */
         
         //Simuluje dotek uživatele
         game.processTouch(new Point(5,3)); // Přesun do laboratoře - zamčeno! --> DESCRIBE
